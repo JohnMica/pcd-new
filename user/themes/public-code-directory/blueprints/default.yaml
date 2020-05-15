@@ -1,0 +1,32 @@
+title: Default Page
+"@extends":
+  type: default
+  context: blueprints://pages
+form:
+  fields:
+    tabs:
+      fields:
+        content:
+          fields:
+            header.in_main_menu:
+              label: Show In Main Menu
+              type: toggle
+              highlight: 1
+              default: 0
+              help: "Display the page in the main menu"
+              options:
+                1: YES
+                0: NO
+              validate:
+                type: bool
+            header.in_footer_menu:
+              label: Show In Footer
+              type: toggle
+              highlight: 1
+              default: 0
+              help: "Display the page in the footer menu"
+              options:
+                1: YES
+                0: NO
+              validate:
+                type: bool

@@ -1,0 +1,22 @@
+title: Home Page
+"@extends": default
+
+form:
+  fields:
+    tabs:
+      fields:
+        content:
+          fields:
+            header.github_section:
+              type: section
+              title: "Github section"
+              underline: true
+
+            header.github_content:
+              type: textarea
+              class: fancy
+              label: "Section description"
+            header.github_howto:
+              type: editor
+              classes: frontmatter
+              label: "How To open an Issue"

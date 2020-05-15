@@ -1,0 +1,29 @@
+enabled: true
+from: john@threebros.design
+from_name: null
+to: john@threebros.design
+to_name: null
+queue:
+  enabled: false
+  flush_frequency: '* * * * *'
+  flush_msg_limit: 10
+  flush_time_limit: 100
+mailer:
+  engine: sendmail
+  smtp:
+    server: localhost
+    port: 25
+    encryption: none
+    user: john
+    password: null
+  sendmail:
+    bin: '/usr/sbin/sendmail -bs'
+content_type: text/html
+debug: true
+charset: null
+cc: null
+cc_name: null
+bcc: null
+reply_to: john@threebros.design
+reply_to_name: null
+body: null

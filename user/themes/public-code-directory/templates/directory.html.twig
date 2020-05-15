@@ -1,0 +1,42 @@
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+<section class="section container">
+	<div class="columns is-centered">
+		<div class="column is-hidden-mobile is-3">
+			{% include "modular/sidebar.html.twig" %}
+		</div>
+		<div class="column is-9">
+			<div class="columns ">
+				{# <div class="column is-12 ">
+					<div class="content px-1">
+						{{ page.content|raw }}
+					</div>
+				</div> #}
+				<div class="column is-12">
+					<main class="main-content">
+						<div class="content px-1">
+							{% include "modular/totalproducts.html.twig" %}
+						</div>
+						<b-tabs type="is-toggle" position="is-centered" destroy-on-hide>
+							<b-tab-item label="List View" icon="grip-horizontal">
+								{% include "modular/listview.html.twig" %}
+							</b-tab-item>
+							<b-tab-item label="Table View" icon="table">
+								{% include "modular/tableview.html.twig" %}
+							</b-tab-item>
+							<b-tab-item label="Worl Map" icon="map">
+								{% include "modular/worldmap.html.twig" %}
+							</b-tab-item>
+						</b-tabs>
+
+					</main>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+
+</section>
+{% endblock %}

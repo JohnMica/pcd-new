@@ -1,0 +1,92 @@
+ <!-- map view -->
+ <worldmap inline-template>
+     <div class="map-container">
+         <div class="map-wrapper" ref="mapWrapper">
+             <l-map ref="map" :max-zoom='maxZoom' :min-zoom='minZoom' :zoom="zoom" :center="center"
+                 style="height:350px;">
+                 <l-tile-layer :url='url'> </l-tile-layer>
+                 <l-marker v-for="(marker,id) in locations" :key="id" :lat-lng="marker.position"
+                     @popupopen='udpateSelectedMapObj(marker)' @popupclose='removeSelection(marker)'>
+                     <l-popup :content='marker.attribution'>
+                     </l-popup>
+                 </l-marker>
+             </l-map>
+         </div>
+
+         <div class="card" v-if='showObjectMap'>
+             <header class="card-header">
+                 <div class="card-header-title">
+                     <div class="column">
+                         <img v-if='selectedMapObj.logo_url' class='small-logo' :src="selectedMapObj.logo_url"
+                             :alt="`${selectedMapObj.name} logo`">
+
+                     </div>
+                     <div class="column has-text-right">
+                         <p v-for='(licence,ind) in selectedMapObj.licence' :key='ind'>
+                             <span> ${ licence }</span>
+                         </p>
+                     </div>
+                 </div>
+             </header>
+             <div class="card-content ">
+                 <div class="content ">
+                     <p class="content-title title">
+                         ${ selectedMapObj.name }
+                     </p>
+                     <p class="content-text">
+                         Origin Country: <span class='is-bold'> ${ selectedMapObj.origin_country }</span>
+                     </p>
+                     <p class="content-text" v-if='selectedMapObj.sector.length === 1'>
+                         Sector:
+                         <span class=' tag' id="index" v-for='(sector, index) in selectedMapObj.sector'>
+                             ${sector}
+                         </span>
+                     </p>
+                     <p class="content-text" v-else>
+                         Sectors:
+                         <span class=' tag' id="index" v-for='(sector, index) in selectedMapObj.sector'>
+                             ${sector}
+                         </span>
+                     </p>
+                     <p class="content-text is-flex is-between">
+                         <a :href="selectedMapObj.official_url" rel='noopener' class="project-link"> Visit Project
+                             Site</a>
+                         <a :href="selectedMapObj.repository" rel='noopener' class="project-link">Project Repository</a>
+                     </p>
+                     <p class="content-text" v-if='!showMore'>${selectedMapObj.description | truncate(150)}</p>
+                     <div class="content-text" v-else>
+                         <p>${ selectedMapObj.description }</p>
+                         <p v-if="selectedMapObj.category.length === 1 ">Category:
+                             <span class=' tag' id="index" v-for='(prod_categ, index) in selectedMapObj.category'>
+                                 ${prod_categ}
+                             </span>
+                         </p>
+                         <p v-else>Categories:
+                             <span class=' tag' id="index" v-for='(prod_categ, index) in selectedMapObj.category'>
+                                 ${prod_categ}
+                             </span>
+                         </p>
+                         <p>
+                             Developed by:
+                             <span v-for='(dev,ind) in selectedMapObj.developers' :key='ind'>
+                                 <a :href="dev.developer_name" rel='noopener'> ${ dev.developer_name } </a>
+                             </span>
+                         </p>
+                         <p v-if='selectedMapObj.maintainers.length >0'>
+                             Maintained by:
+                             <span v-for='(maintainer,ind) in selectedMapObj.maintainers' :key='ind'>
+                                 <a :href="maintainer.url" rel='noopener'> ${ maintainer.name } </a>
+                             </span>
+                         </p>
+                     </div>
+
+                 </div>
+             </div>
+             <footer class="card-footer">
+                 <a href="#" class="card-footer-item" v-if='!showMore' @click.prevent='showMore =!showMore'>Show
+                     More</a>
+                 <a href="#" v-else class="card-footer-item" @click.prevent='showMore=!showMore'>Show Less</a>
+             </footer>
+         </div>
+     </div>
+ </worldmap>

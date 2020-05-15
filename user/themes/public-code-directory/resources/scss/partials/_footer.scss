@@ -1,0 +1,53 @@
+// Footer style
+.footer {
+  margin-top: 2rem;
+  padding: 0;
+  box-shadow: 0 1000px 0 1000px $footer-background-color;
+
+  .images {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+
+    .footer-image {
+      padding: 1rem;
+      display: flex;
+      align-self: center;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+    .partner-image {
+      height: 35px;
+    }
+  }
+  .content,
+  .columns {
+    padding: 1rem;
+  }
+
+  .twitter {
+    .logo {
+      height: 40px;
+    }
+  }
+}
+.footer-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+}
+.is-dark {
+  background-color: $footer-bg;
+  .footer-link {
+    color: white;
+    &:hover {
+      color: darken(white, 15%);
+    }
+  }
+}

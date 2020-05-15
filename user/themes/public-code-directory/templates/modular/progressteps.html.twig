@@ -1,0 +1,701 @@
+<!-- list view -->
+
+{% verbatim %}
+<progressteps inline-template>
+    <div class="progress-steps">
+        <ul class="steps">
+            <li class="step-item " :class="{'is-warning is-active':currentStep<2, 'is-link is-active':currentStep>1}">
+                <div class="step-marker">
+                    <span class="icon" v-if='currentStep>1'>
+                        <i class="fa fa-check"></i>
+                    </span>
+                </div>
+                <div class="step-details " :class="{'is-primary is-completed':currentStep>1}">
+                    <p class="step-title">Your Details</p>
+                </div>
+            </li>
+            <li class="step-item " :class="{'is-warning is-active':currentStep===2, 'is-link is-active':currentStep>2}">
+                <div class="step-marker">
+                    <span class="icon" v-if='currentStep>2'>
+                        <i class="fa fa-check"></i>
+                    </span>
+                </div>
+                <div class="step-details" :class='{"is-primary is-completed": currentStep>2}'>
+                    <p class="step-title">Project Details</p>
+                </div>
+            </li>
+            <li class="step-item " :class="{'is-warning is-active':currentStep===3, 'is-link is-active':currentStep>3}">
+                <div class="step-marker">
+                    <span class="icon" v-if='currentStep>3'>
+                        <i class="fa fa-check"></i>
+                    </span>
+                </div>
+                <div class="step-details" :class='{"is-primary is-completed": currentStep>3}'>
+                    <p class="step-title">Developers</p>
+                </div>
+            </li>
+            <li class="step-item " :class="{'is-warning is-active':currentStep===4, 'is-link is-active':currentStep>3}">
+                <div class="step-marker">
+                    <span class="icon" v-if='currentStep>4'>
+                        <i class="fa fa-check"></i>
+                    </span>
+                </div>
+                <div class="step-details" :class='{"is-primary is-completed": currentStep>4}'>
+                    <p class="step-title">Users</p>
+                </div>
+            </li>
+            <li class="step-item " :class="{'is-warning is-active':sendingForm, 'is-link is-active':submitSuccess}">
+                <div class="step-marker">
+                    <span class="icon" v-if='submitSuccess'>
+                        <i class="fa fa-flag"></i>
+                    </span>
+                </div>
+                <div class="step-details" :class='{"is-primary is-completed": submitSuccess}'>
+                    <p class="step-title">Submit</p>
+                </div>
+            </li>
+        </ul>
+        <validation-observer ref='form' v-slot="{ handleSubmit }">
+            <form method="post" accept-charset="UTF-8" @submit.prevent="handleSubmit(onSubmit)">
+
+                <div class="step" v-if="currentStep === 1">
+                    <validation-provider rules="name:3" name="Name" v-slot="{ errors, invalid, valid }">
+                        <b-field label="Name">
+                            <b-input v-model="form.yourName" data-grav-field="text" name="data[yourname]" value=""
+                                type="text" required="required" data-grav-disabled="true" data-grav-default="null"
+                                :class='{"is-danger":invalid,"is-success":valid}'>
+                            </b-input>
+                        </b-field>
+                        <span class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></span>
+                    </validation-provider>
+                    <validation-provider rules="required|email" name="data[email]" v-slot="{ errors, valid }">
+                        <b-field label="Email" data-grav-field="text" data-grav-disabled="true"
+                            data-grav-default="null">
+                            <b-input type="email" v-model='form.emailAddress' maxlength="50" name="data[email]" value=""
+                                required="required">
+                            </b-input>
+                        </b-field>
+                    </validation-provider>
+                    <b-field label="Organisation" data-grav-field="text" data-grav-disabled="true"
+                        data-grav-default="null">
+                        <b-input type="text" v-model='form.organisation' maxlength="50" name="data[organisation]"
+                            value="">
+                        </b-input>
+                    </b-field>
+
+                </div>
+
+
+
+                <div class="step" v-else-if='currentStep === 2'>
+                    <validation-provider rules="name:3" name="Project Name" v-slot="{ errors, invalid, valid }">
+                        <b-field label="Project Name" data-grav-field="text" data-grav-disabled="true"
+                            data-grav-default="null">
+                            <b-input type="text" v-model='form.projectName' maxlength="50" name="data[projectName]"
+                                value="" required="required">
+                            </b-input>
+                        </b-field>
+                        <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                    </validation-provider>
+
+                    <validation-provider rules="url_string" name="Project Website" v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: https://example.com" type="is-light" animated>
+                                <b-field label="Project Website" data-grav-field="text" data-grav-disabled="true"
+                                    data-grav-default="null">
+                                    <b-input type="text" v-model='form.projectWebsite' maxlength="50"
+                                        name="data[projectWebsite]" value="" required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                    <validation-provider rules="url_string" name="Repository URL" v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-field label="Repository URL" data-grav-field="text" data-grav-disabled="true"
+                                data-grav-default="null">
+                                <b-input type="text" v-model='form.projectUrl' maxlength="50" name="data[projectUrl]"
+                                    value="" required="required">
+                                </b-input>
+                            </b-field>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                    <validation-provider rules="alpha_num:2" name="Project Country" v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: Canada" type="is-light" animated>
+                                <b-field label="Project Starting Country" data-grav-field="text"
+                                    data-grav-disabled="true" data-grav-default="null">
+                                    <b-input type="text" v-model='form.projectCountry' maxlength="50"
+                                        name="data[projectCountry]" value="" required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                    <validation-provider rules="alpha_num:2" name="Project Languages"
+                        v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: EN, IT, FR, DE" type="is-light" animated>
+                                <b-field label="Project Languages" data-grav-field="text" data-grav-disabled="true"
+                                    data-grav-default="null">
+                                    <b-input type="text" v-model='form.projectLanguages' maxlength="50"
+                                        name="data[projectLanguages]" value="" required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                    <validation-provider rules="alpha_num:3" name="Project Type" v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: website, mobile app, platform" type="is-light" animated>
+                                <b-field label="Project Type" data-grav-field="text" data-grav-disabled="true"
+                                    data-grav-default="null">
+                                    <b-input type="text" v-model='form.projectType' maxlength="50"
+                                        name="data[projectType]" value="" required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                    <validation-provider rules="alpha_num:3" name="Project Licences"
+                        v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: MIT, GPL" type="is-light" animated>
+                                <b-field label="Project Licence" data-grav-field="text" data-grav-disabled="true"
+                                    data-grav-default="null">
+                                    <b-input type="text" v-model='form.projectLicence' maxlength="50"
+                                        name="data[projectLicence]" value="" required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                    <validation-provider rules="alpha_num:3" name="Project Category"
+                        v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: Education Software, Software" type="is-light" animated>
+                                <b-field label="Project Category" data-grav-field="text" data-grav-disabled="true"
+                                    data-grav-default="null">
+                                    <b-input type="text" v-model='form.projectCategory' maxlength="50"
+                                        name="data[projectCategory]" value="" required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                    <validation-provider rules="alpha_num:3" name="Project Category"
+                        v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: Local Government, Public Health" type="is-light" animated>
+                                <b-field label="Project Sector" data-grav-field="text" data-grav-disabled="true"
+                                    data-grav-default="null">
+                                    <b-input type="text" v-model='form.projectSector' maxlength="50"
+                                        name="data[projectSector]" value="" required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                    <validation-provider rules="minmax:10,350" name="Project Category"
+                        v-slot="{ errors, invalid, valid }">
+
+                        <b-field label="Project Description" data-grav-field="text" data-grav-disabled="true"
+                            data-grav-default="null">
+                            <b-input type="textarea" v-model='form.projectDescription' maxlength="350"
+                                name="data[projectDescription]" value="" required="required">
+                            </b-input>
+                        </b-field>
+                        <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                    </validation-provider>
+                </div>
+
+
+
+                <div class="step" v-else-if='currentStep === 3'>
+                    <b-field label='Developers'>
+                        <b-button @click.prevent='addDevelopers'>Add Developers</b-button>
+                    </b-field>
+                    <div v-for='(dev,ind) in form.projectDevelopers' :key='ind'>
+                        <hr v-if='ind>=1'>
+
+                        <b-field v-if='ind>=1' class='is-flex justify-end'>
+                            <b-button @click.prevent='removeDeveloper(ind)'>Remove Dev</b-button>
+                        </b-field>
+                        <validation-provider rules="name:3" name="Developer Name" v-slot="{ errors, invalid, valid }">
+                            <b-field label="Developer Name" data-grav-field="text" data-grav-disabled="true"
+                                data-grav-default="null">
+                                <b-input type="text" v-model='form.projectDevelopers[ind].name' maxlength="50"
+                                    name="data[projectDevelopers][ind][name]" value="" required="required">
+                                </b-input>
+                            </b-field>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </validation-provider>
+
+                        <validation-provider rules="url_string" name="Developer Website"
+                            v-slot="{ errors, invalid, valid }">
+                            <div>
+                                <b-tooltip label="eg: https://example.com">
+                                    <b-field label="Developer Website" data-grav-field="text" data-grav-disabled="true"
+                                        data-grav-default="null">
+                                        <b-input type="text" v-model='form.projectDevelopers[ind].website'
+                                            maxlength="50" name="data[projectDevelopers][ind][website]" value=""
+                                            required="required">
+                                        </b-input>
+                                    </b-field>
+                                </b-tooltip>
+                                <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                            </div>
+                        </validation-provider>
+
+                        <validation-provider rules="url_string" name="Developer Logo URL"
+                            v-slot="{ errors, invalid, valid }">
+                            <div>
+                                <b-tooltip label="eg: https://example.com/logo.png">
+                                    <b-field label="Developer Logo URL" data-grav-field="text" data-grav-disabled="true"
+                                        data-grav-default="null">
+                                        <b-input type="text" v-model='form.projectDevelopers[ind].logoUrl'
+                                            maxlength="50" :name="`data[projectDevelopers][${ind}][logoUrl]`" value=""
+                                            required="required">
+                                        </b-input>
+                                    </b-field>
+                                </b-tooltip>
+                                <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                            </div>
+                        </validation-provider>
+
+                        <validation-provider rules="alpha_num:3" name="Developer Category"
+                            v-slot="{ errors, invalid, valid }">
+                            <div>
+                                <b-tooltip label="eg: Education Software, Software">
+                                    <b-field label="Developer Category" data-grav-field="text" data-grav-disabled="true"
+                                        data-grav-default="null">
+                                        <b-input type="text" v-model='form.projectDevelopers[ind].category'
+                                            maxlength="50" name="data[projectDevelopers][ind][category]" value=""
+                                            required="required">
+                                        </b-input>
+                                    </b-field>
+                                </b-tooltip>
+                                <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                            </div>
+                        </validation-provider>
+                    </div>
+                    <b-field label='Maintainers'>
+                        <b-checkbox v-model='sameAsDevs'>Same as Developers</b-checkbox>
+                    </b-field>
+                    <div v-if='!sameAsDevs'>
+                        <b-field label='Maintainers'>
+                            <b-button @click.prevent='addMaintainers'>Add Maintainers</b-button>
+                        </b-field>
+                        <div v-for='(dev,ind) in form.projectMaintainers' :key='ind'>
+                            <hr v-if='ind>=1'>
+                            <b-field v-if='ind>=1' class='is-flex justify-end'>
+                                <b-button @click.prevent='removeMaintainer(ind)'>Remove Dev</b-button>
+                            </b-field>
+
+                            <validation-provider rules="name:3" name="Maintainers Name"
+                                v-slot="{ errors, invalid, valid }">
+                                <b-field label="Maintainers Name" data-grav-field="text" data-grav-disabled="true"
+                                    data-grav-default="null">
+                                    <b-input type="text" v-model='form.projectMaintainers[ind].name' maxlength="50"
+                                        name="data[projectMaintainers][ind][name]" value="" required="required">
+                                    </b-input>
+                                </b-field>
+                                <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                            </validation-provider>
+
+                            <validation-provider rules="url_string" name="Maintainers Website"
+                                v-slot="{ errors, invalid, valid }">
+                                <div>
+                                    <b-tooltip label="eg: https://example.com">
+                                        <b-field label="Maintainers Website" data-grav-field="text"
+                                            data-grav-disabled="true" data-grav-default="null">
+                                            <b-input type="text" v-model='form.projectMaintainers[ind].website'
+                                                maxlength="50" name="data[projectMaintainers][ind][website]" value=""
+                                                required="required">
+                                            </b-input>
+                                        </b-field>
+                                    </b-tooltip>
+                                    <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                                </div>
+                            </validation-provider>
+
+                            <validation-provider rules="url_string" name="Maintainers Logo"
+                                v-slot="{ errors, invalid, valid }">
+                                <div>
+                                    <b-tooltip label="eg: https://example.com/logo.png">
+                                        <b-field label="Maintainers Logo" data-grav-field="text"
+                                            data-grav-disabled="true" data-grav-default="null">
+                                            <b-input type="text" v-model='form.projectMaintainers[ind].logoUrl'
+                                                maxlength="50" :name="`data[projectMaintainers][${ind}][logoUrl]`"
+                                                value="" required="required">
+                                            </b-input>
+                                        </b-field>
+                                    </b-tooltip>
+                                    <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                                </div>
+                            </validation-provider>
+
+                            <validation-provider rules="alpha_num:3" name="Maintainers Category"
+                                v-slot="{ errors, invalid, valid }">
+                                <div>
+                                    <b-tooltip label="eg: Education Software, Software">
+                                        <b-field label="Maintainers Category" data-grav-field="text"
+                                            data-grav-disabled="true" data-grav-default="null">
+                                            <b-input type="text" v-model='form.projectMaintainers[ind].category'
+                                                maxlength="50" name="data[projectMaintainers][ind][category]" value=""
+                                                required="required">
+                                            </b-input>
+                                        </b-field>
+                                    </b-tooltip>
+                                    <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                                </div>
+                            </validation-provider>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="step" v-else-if='currentStep === 4'>
+                    <b-field label='Users'>
+                        <b-button @click.prevent='addUsers'>Add Users</b-button>
+                    </b-field>
+                    <div v-for='(dev,ind) in form.projectUsers' :key='ind'>
+                        <hr v-if='ind>=1'>
+                        <b-field v-if='ind>=1' class='is-flex justify-end'>
+                            <b-button @click.prevent='removeUser(ind)'>Remove Dev</b-button>
+                        </b-field>
+
+
+                        <validation-provider rules="name:3" name="Users Name" v-slot="{ errors, invalid, valid }">
+                            <b-field label="Users Name" data-grav-field="text" data-grav-disabled="true"
+                                data-grav-default="null">
+                                <b-input type="text" v-model='dev.name' maxlength="50"
+                                    :name="`form[projectUsers][${ind}][name]`" value="" required="required">
+                                </b-input>
+                            </b-field>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </validation-provider>
+
+                        <validation-provider rules="url_string" name="Users Website"
+                            v-slot="{ errors, invalid, valid }">
+                            <div>
+                                <b-tooltip label="eg: https://example.com">
+                                    <b-field label="Users Website" data-grav-field="text" data-grav-disabled="true"
+                                        data-grav-default="null">
+                                        <b-input type="text" v-model='dev.website' maxlength="50"
+                                            :name="`form[projectUsers][${ind}][website]`" value="" required="required">
+                                        </b-input>
+                                    </b-field>
+                                </b-tooltip>
+                                <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                            </div>
+                        </validation-provider>
+
+                        <validation-provider rules="url_string" name="Users Logo URL"
+                            v-slot="{ errors, invalid, valid }">
+                            <div>
+                                <b-tooltip label="eg: https://example.com/logo.png">
+                                    <b-field label="Users Logo" data-grav-field="text" data-grav-disabled="true"
+                                        data-grav-default="null">
+                                        <b-input type="text" v-model='dev.logoUrl' maxlength="50"
+                                            :name="`form[projectUsers][${ind}][logoUrl]`" value="" required="required">
+                                        </b-input>
+                                    </b-field>
+                                </b-tooltip>
+                                <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                            </div>
+                        </validation-provider>
+
+                        <validation-provider rules="alpha_num:3" name="Users Category"
+                            v-slot="{ errors, invalid, valid }">
+                            <div>
+                                <b-tooltip label="eg: Education Software, Software">
+                                    <b-field label="Users Category" data-grav-field="text" data-grav-disabled="true"
+                                        data-grav-default="null">
+                                        <b-input type="text" v-model='dev.category' maxlength="50"
+                                            :name="`form[projectUsers][${ind}][category]`" value="" required="required">
+                                        </b-input>
+                                    </b-field>
+                                </b-tooltip>
+                                <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                            </div>
+                        </validation-provider>
+                        <validation-provider rules="latlong" name="User Location" v-slot="{ errors, invalid, valid }">
+                            <div>
+                                <b-tooltip label="eg: Latitude required for map placement">
+                                    <b-field label="User Location Latitude">
+                                        <b-input type="text" v-model='dev.location.latitude' maxlength="10"
+                                            :name="`form[projectUsers][${ind}][location][latitude]`" value=""
+                                            required="required">
+                                        </b-input>
+
+
+                                    </b-field>
+                                </b-tooltip>
+                                <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                            </div>
+                        </validation-provider>
+                        <validation-provider rules="latlong" name="User Location" v-slot="{ errors, invalid, valid }">
+                            <div>
+                                <b-tooltip label="eg: Longitude required for map placement">
+                                    <b-field label="User Location Longitude">
+                                        <b-input type="text" v-model='dev.location.longitude' maxlength="10"
+                                            :name="`form[projectUsers][${ind}][location][longitude]`" value=""
+                                            required="required">
+                                        </b-input>
+
+                                    </b-field>
+                                </b-tooltip>
+                                <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                            </div>
+                        </validation-provider>
+
+
+
+                    </div>
+
+                </div>
+
+
+                <b-field class=' is-between pt-5'>
+                    <b-button outlined type="is-primary" @click.prevent='backToStep' :disabled='currentStep===1'>
+                        Prev Step
+                    </b-button>
+                    <button type="submit" class="button is-primary is-outlined" v-if='currentStep<5'>
+                        Next Step
+                    </button>
+                    <button type="submit" v-else class="button is-primary is-outlined">
+                        Submit Form
+                    </button>
+                </b-field>
+            </form>
+        </validation-observer>
+        <div class="step" v-if='submitSuccess'>
+            thsnks
+        </div>
+        <b-modal :active.sync="projectDevelopersModalActive" has-modal-card trap-focus aria-role="dialog" aria-modal>
+            <div class="modal-card" style="width: auto">
+                <section class="modal-card-body">
+                    <b-field label="Developer Name">
+                        <b-input type="text" v-model='tempFormData.name' value="" required="required">
+                        </b-input>
+                    </b-field>
+
+                    <validation-provider rules="url_string" name="Developer Website"
+                        v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: https://example.com">
+                                <b-field label="Developer Website">
+                                    <b-input type="text" v-model='tempFormData.website' maxlength="50" value=""
+                                        required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                    <validation-provider rules="url_string" name="Developer Logo URL"
+                        v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: https://example.com/logo.png">
+                                <b-field label="Developer Logo">
+                                    <b-input type="text" v-model='tempFormData.logoUrl' maxlength="50" value=""
+                                        required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                    <validation-provider rules="alpha_num:3" name="Developer Category"
+                        v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: Education Software, Software">
+                                <b-field label="Developer Category">
+                                    <b-input type="text" v-model='tempFormData.category' maxlength="50" value=""
+                                        required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button" type="button" @click.prevent="closeModal">Close</button>
+                    <button class="button is-primary" @click.prevent="saveDeveloper()">
+                        Add Developer
+                    </button>
+                </footer>
+            </div>
+        </b-modal>
+        <b-modal :active.sync="projectMaintainersModalActive" has-modal-card trap-focus aria-role="dialog" aria-modal>
+            <div class="modal-card" style="width: auto">
+                <section class="modal-card-body">
+                    <b-field label="Maintainer Name">
+                        <b-input type="text" v-model='tempFormData.name' value="" required="required">
+                        </b-input>
+                    </b-field>
+
+                    <validation-provider rules="url_string" name="Maintainer Website"
+                        v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: https://example.com">
+                                <b-field label="Maintainer Website">
+                                    <b-input type="text" v-model='tempFormData.website' maxlength="50" value=""
+                                        required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                    <validation-provider rules="url_string" name="Maintainer Logo URL"
+                        v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: https://example.com/logo.png">
+                                <b-field label="Maintainer Logo">
+                                    <b-input type="text" v-model='tempFormData.logoUrl' maxlength="50" value=""
+                                        required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                    <validation-provider rules="alpha_num:3" name="Maintainer Category"
+                        v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: Education Software, Software">
+                                <b-field label="Maintainer Category">
+                                    <b-input type="text" v-model='tempFormData.category' maxlength="50" value=""
+                                        required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button" type="button" @click.prevent="closeModal">Close</button>
+                    <button class="button is-primary" @click.prevent="saveMaintainer()">
+                        Add Developer
+                    </button>
+                </footer>
+            </div>
+        </b-modal>
+        <b-modal :active.sync="projectUsersModalActive" has-modal-card trap-focus aria-role="dialog" aria-modal>
+            <div class="modal-card" style="width: auto">
+                <section class="modal-card-body">
+                    <b-field label="User Name">
+                        <b-input type="text" v-model='tempFormData.name' value="" required="required">
+                        </b-input>
+                    </b-field>
+
+                    <validation-provider rules="url_string" name="User Website" v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: https://example.com">
+                                <b-field label="User Website">
+                                    <b-input type="text" v-model='tempFormData.website' maxlength="50" value=""
+                                        required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+
+                    <validation-provider rules="url_string" name="User Logo URL" v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: https://example.com.logo.png">
+                                <b-field label="User Logo">
+                                    <b-input type="text" v-model='tempFormData.logoUrl' maxlength="50" value=""
+                                        required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                    <validation-provider rules="alpha_num:3" name="User Category" v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: City Council, Library, Local Government">
+                                <b-field label="User Category">
+                                    <b-input type="text" v-model='tempFormData.category' maxlength="50" value=""
+                                        required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                    <validation-provider rules="latlong" name="User Location" v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: Latitude required for map placement">
+                                <b-field label="User Location Latitude">
+                                    <b-input type="text" v-model='tempFormData.location.latitude' maxlength="10"
+                                        value="" required="required">
+                                    </b-input>
+
+
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+                    <validation-provider rules="latlong" name="User Location" v-slot="{ errors, invalid, valid }">
+                        <div>
+                            <b-tooltip label="eg: Longitude required for map placement">
+                                <b-field label="User Location Longitude">
+                                    <b-input type="text" v-model='tempFormData.location.longitude' maxlength="10"
+                                        value="" required="required">
+                                    </b-input>
+
+                                </b-field>
+                            </b-tooltip>
+                            <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
+                        </div>
+                    </validation-provider>
+
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button" type="button" @click.prevent="closeModal">Close</button>
+                    <button class="button is-primary" @click.prevent="saveUser()">
+                        Add User
+                    </button>
+                </footer>
+            </div>
+        </b-modal>
+    </div>
+</progressteps>
+{% endverbatim %}

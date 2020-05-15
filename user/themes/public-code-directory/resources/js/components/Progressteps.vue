@@ -1,0 +1,199 @@
+<script>
+import { ValidationObserver, ValidationProvider, validate } from "vee-validate";
+export default {
+  name: "Progressteps",
+  components: {
+    ValidationObserver,
+    ValidationProvider
+  },
+  data() {
+    return {
+      currentStep: 5,
+      submitSuccess: false,
+      projectDevelopersModalActive: false,
+      projectMaintainersModalActive: false,
+      projectUsersModalActive: false,
+      sendingForm: false,
+      formSubmitted: false,
+      counterDev: 0,
+      counterMaint: 0,
+      sameAsDevs: false,
+      form: {
+        yourName: "",
+        emailAddress: "",
+        organisation: "",
+        projectName: "",
+        projectWebsite: "",
+        projectUrl: "",
+        projectCountry: "",
+        prjectLanguages: [],
+        projectType: "",
+        projectLicence: "",
+        projectCategory: "",
+        projectSector: "",
+        projectDescription: "",
+        projectDevelopers: [
+          {
+            name: "",
+            website: "",
+            logoUrl: "",
+            category: ""
+          }
+        ],
+        projectMaintainers: [
+          {
+            name: "",
+            website: "",
+            logoUrl: "",
+            category: ""
+          }
+        ],
+        projectUsers: [
+          {
+            name: "",
+            website: "",
+            logoUrl: "",
+            category: "",
+            location: {
+              longitude: "",
+              latitude: ""
+            }
+          }
+        ]
+      },
+      tempFormData: {
+        name: "",
+        website: "",
+        logoUrl: "",
+        category: "",
+        location: {
+          longitude: "",
+          latitude: ""
+        }
+      }
+    };
+  },
+  computed: {},
+  methods: {
+    backToStep() {
+      if (this.currentStep === 1) {
+        return;
+      }
+      this.currentStep--;
+    },
+    addDevelopers() {
+      this.showDevs = true;
+      this.counterDev++;
+      this.projectDevelopersModalActive = true;
+    },
+    addMaintainers() {
+      this.showDevs = true;
+      this.counterMaint++;
+      this.projectMaintainersModalActive = true;
+    },
+    addUsers() {
+      this.showUsers = true;
+      this.counterUsers++;
+      this.projectUsersModalActive = true;
+    },
+    closeModal() {
+      this.projectDevelopersModalActive = false;
+      this.projectMaintainersModalActive = false;
+      this.projectUsersModalActive = false;
+    },
+    saveDeveloper() {
+      this.projectDevelopersModalActive = false;
+      this.form.projectDevelopers.push(this.tempFormData);
+      this.tempFormData = {
+        name: "",
+        website: "",
+        logoUrl: "",
+        category: "",
+        longitude: "",
+        latitude: ""
+      };
+    },
+    saveUser() {
+      this.projectUsersModalActive = false;
+      this.form.projectUsers.push(this.tempFormData);
+      this.tempFormData = {
+        name: "",
+        website: "",
+        logoUrl: "",
+        category: "",
+        longitude: "",
+        latitude: ""
+      };
+    },
+    saveMaintainer() {
+      this.projectMaintainersModalActive = false;
+      this.form.projectMaintainers.push(this.tempFormData);
+      this.tempFormData = {
+        name: "",
+        website: "",
+        logoUrl: "",
+        category: "",
+        longitude: "",
+        latitude: ""
+      };
+    },
+    removeDeveloper(index) {
+      this.form.projectDevelopers.splice(index, 1);
+      this.tempFormData = {
+        name: "",
+        website: "",
+        logoUrl: "",
+        category: "",
+        longitude: "",
+        latitude: ""
+      };
+    },
+    removeMaintainer(index) {
+      this.form.projectMaintainers.splice(index, 1);
+      this.tempFormData = {
+        name: "",
+        website: "",
+        logoUrl: "",
+        category: "",
+        longitude: "",
+        latitude: ""
+      };
+    },
+    removeUser(index) {
+      this.form.projectUsers.splice(index, 1);
+      this.tempFormData = {
+        name: "",
+        website: "",
+        logoUrl: "",
+        category: "",
+        longitude: "",
+        latitude: ""
+      };
+    },
+    onSubmit() {
+      console.log(this.form);
+      this.sendingForm = true;
+      if (this.currentStep === 4) {
+        this.fourthStepCompleted = true;
+        this.firstStepVisible = false;
+        this.secondStepVisible = false;
+        this.thirdStepVisible = false;
+        this.fourthStepVisible = false;
+        this.submitSuccess = true;
+        this.sendingForm = false;
+        requestAnimationFrame(() => {
+          this.$refs.form.reset();
+        });
+        return;
+      }
+
+      this.currentStep++;
+    }
+  }
+};
+</script>
+<style lang="scss">
+.field.is-between {
+  justify-content: space-between;
+}
+</style>

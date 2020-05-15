@@ -1,0 +1,33 @@
+.small-logo {
+  height: 50px;
+  max-width: unset;
+  object-fit: contain;
+}
+.is-column {
+  flex-direction: column;
+}
+
+.is-between {
+  justify-content: space-between;
+}
+.card {
+  margin-bottom: 1rem;
+}
+.px-1 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.pl-1 {
+  padding-left: 1rem;
+}
+.pr-3 {
+  padding-right: 1rem;
+}
+
+.py-3 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+.align-centered {
+  align-items: center;
+}

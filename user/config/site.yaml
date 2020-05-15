@@ -1,0 +1,19 @@
+title: 'Public Code Directory'
+default_lang: en
+author:
+  name: 'John Mica'
+  email: john@threebros.design
+taxonomies:
+  - category
+  - tag
+metadata:
+  description: 'Public Code Directory is a federated database with Open Source projects used by public authorities.'
+summary:
+  enabled: true
+  format: short
+  size: 300
+  delimiter: '==='
+redirects: null
+routes: null
+blog:
+  route: /blog

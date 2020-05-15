@@ -1,0 +1,60 @@
+{% extends 'partials/base.html.twig' %}
+{% block hero %}
+<section class="hero is-medium is-gradient">
+    <div class="hero-head">
+        <div class="container">
+            {% include "partials/navbar.html.twig" %}
+        </div>
+    </div>
+    <div class="hero-body has-text-centered">
+        <div class="columns is-centered is-multiline">
+            <div class="column is-12 ">
+                <h2 class="is-size-2">{{ page.title|raw }}</h2>
+            </div>
+            <div class="column is-12  ">
+                <ol class='header-join-list'>
+                    <li>
+                        <span class="number-circle">1</span>
+                        <span class='desc'>Submit a project</span>
+                    </li>
+                    <li>
+                        <span class="number-circle">2</span>
+                        <span class='desc'>We review your submission</span>
+                    </li>
+                    <li>
+                        <span class="number-circle">3</span>
+                        <span class='desc'>We include your project in our listings</span>
+                    </li>
+                </ol>
+            </div>
+            <div class="column is-12  join-page-content">
+                {{ page.content|raw }}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+{% block content %}
+<section class="section container">
+    <div class="columns is-centered is-multiline ">
+        <div class="column is-12 is-8-desktop   ">
+            <div class="columns is-centered is-multiline has-background-white ">
+                <div class="column is-12 is-12-mobile">
+                    {# <b-tabs expanded>
+                        <b-tab-item label="Complete Form" icon="align-left" multiline class='py-3'>
+                            {% include "modular/progressteps.html.twig" %}
+                        </b-tab-item>
+                        <b-tab-item label="Upload File" icon="cloud-upload-alt" class='py-3'>
+                            {% include "forms/form.html.twig" %}
+                        </b-tab-item>
+                        <b-tab-item label="Github PR" icon="video" class='py-3'>
+                        </b-tab-item>
+                    </b-tabs> #}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="columns is-compensating"></div>
+</section>
+{% endblock %}

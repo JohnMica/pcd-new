@@ -1,0 +1,19 @@
+{% extends 'partials/base.html.twig' %}
+
+{% block hero %}
+
+this is the hreoerer
+{% endblock %}
+
+{% block content %}
+
+<div class="columns is-centered is-multiline">
+    <div class="column is-10 is-8-desktop">
+        {{ page.content|raw }}
+    </div>
+    <div class="column is-10 is-8-desktop">
+        {% include "forms/data.html.twig" %}
+    </div>
+</div>
+
+{% endblock %}

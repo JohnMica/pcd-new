@@ -1,0 +1,87 @@
+<sidebar-filters inline-template>
+	<aside class="aside">
+		<b-field label="Search Projects">
+			<b-autocomplete open-on-focus v-model='name' placeholder="e.g. Govstrap" icon="search" clearable
+				:data='filteredProductNames' @input='updateFilteredItems'>
+			</b-autocomplete>
+		</b-field>
+		<div class="is-flex justify-between align-center">
+			<span class="label py-2 is-marginless">Filters</span>
+			<b-button icon-left="times-circle" class='aligh-right is-small' v-if='filtersApplied' @click='clearAllFilters'>
+				Clear Filters
+			</b-button>
+		</div>
+		<b-field label="Select Country">
+			<b-autocomplete open-on-focus v-model="country" :data="filteredDataArray" placeholder="e.g. UK" icon="search"
+				clearable @select="option => selected = option" @input='updateFilteredItems'>
+				<template slot="empty">No results found</template>
+			</b-autocomplete>
+		</b-field>
+		{# <div class="buttons is-right" v-if='filtersApplied'>
+			<b-button icon-left="times-circle" class='aligh-right' @click='clearAllFilters'>
+				Clear Filters
+			</b-button>
+		</div> #}
+		<hr>
+		<b-field label="Sectors">
+			<b-checkbox :indeterminate="checkedSectors.length>0 && checkedSectors.length < sectors.length"
+				:value='checkedSectors.length === sectors.length' @input='toggleSectors'>
+				All Sectors
+			</b-checkbox>
+		</b-field>
+		<b-field v-for="(item,inde) in sectors" :key=`"sector-${inde}"`>
+			<b-checkbox v-model="checkedSectors" :native-value="item" @input='updateFilteredItems'>
+				${item}
+			</b-checkbox>
+		</b-field>
+		<hr>
+		<b-field label="Categories">
+			<b-checkbox :indeterminate="checkedCategories.length>0 && checkedCategories.length < categories.length"
+				:value='checkedCategories.length === categories.length' @input='toggleCategs'>
+				All Categories
+			</b-checkbox>
+		</b-field>
+		<b-field v-for="(item,inde) in categories" :key=`"categ-${inde}"`>
+			<b-checkbox v-model="checkedCategories" :native-value="item" @input='updateFilteredItems'>
+				${item}
+			</b-checkbox>
+		</b-field>
+		<hr>
+		<b-field label="Licences">
+			<b-checkbox :indeterminate="checkedLicences.length>0 && checkedLicences.length < licences.length"
+				:value='checkedLicences.length === licences.length' @input='toggleLicences'>
+				All Licences
+			</b-checkbox>
+		</b-field>
+		<b-field v-for="(item,inde) in licences" :key=`"licence-${inde}"`>
+			<b-checkbox v-model="checkedLicences" :native-value="item" @input='updateFilteredItems'>
+				${item}
+			</b-checkbox>
+		</b-field>
+		<hr>
+		<b-field label="Languages">
+			<b-checkbox :indeterminate="checkedLang.length>0 && checkedLang.length < languages.length"
+				:value='checkedLang.length === languages.length' @input='toggleLangs'>
+				All Users
+			</b-checkbox>
+		</b-field>
+		<b-field v-for="(item,inde) in languages" :key=`"languages-${inde}"`>
+			<b-checkbox v-model="checkedLang" :native-value="item" @input='updateFilteredItems'>
+				${item}
+			</b-checkbox>
+		</b-field>
+		<hr>
+		<b-field label="Users">
+			<b-checkbox :indeterminate="checkedUsers.length>0 && checkedUsers.length < users.length"
+				:value='checkedUsers.length === users.length' @input='toggleUsers'>
+				All Users
+			</b-checkbox>
+		</b-field>
+		<b-field v-for="(item,inde) in users" :key=`"users-${inde}"`>
+			<b-checkbox v-model="checkedUsers" :native-value="item">
+				${item}
+			</b-checkbox>
+		</b-field>
+		<hr>
+	</aside>
+</sidebar-filters>

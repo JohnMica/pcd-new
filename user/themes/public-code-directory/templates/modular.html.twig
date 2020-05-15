@@ -1,0 +1,27 @@
+{% extends 'partials/base.html.twig' %}
+
+{% set show_onpage_menu = header.onpage_menu == true or header.onpage_menu is null %}
+{% macro pageLinkName(text) %}{{ text|lower|replace({' ':'_'}) }}
+{% endmacro %}
+
+{% block hero %}
+{% for module in page.collection()if module.template == 'modular/hero' %}
+<div id="{{  module.menu|hyphenize }}"></div>
+{{ module.content|raw }}
+{% endfor %}
+{% endblock %}
+
+{% block content %}
+
+<div class="columns is-multiline is-centered">
+    <div class="column is-10 is-8-desktop">
+        {{page.content|raw }}
+    </div>
+    {% for module in page.collection() %}
+    <div class='column is-10 is-8-desktop' id="{{  module.menu|hyphenize  }}">
+        {{ module.content|raw  }}
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

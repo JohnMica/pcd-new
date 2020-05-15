@@ -1,0 +1,17 @@
+enabled: true
+dropdown:
+  enabled: true
+theme:
+  logo: logo.svg
+  favicon: favicon.png
+  upload_image:
+    user/themes/pcd/assets/favicon.png:
+      name: favicon.png
+      type: image/png
+      size: 15877
+      path: user/themes/pcd/assets/favicon.png
+    user/themes/pcd/assets/logo.svg:
+      name: logo.svg
+      type: image/svg+xml
+      size: 1775
+      path: user/themes/pcd/assets/logo.svg

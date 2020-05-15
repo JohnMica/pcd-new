@@ -1,0 +1,86 @@
+<!-- list view -->
+
+{% verbatim %}
+<listview inline-template>
+    <div class="wrapper">
+        <div class="prod">
+            <div class="card" v-for='(product,index) in filteredProducts' :key='index'>
+                <header class="card-header">
+                    <div class="card-header-title columns is-multiline">
+                        <div class="column">
+                            <img v-if='product.logo_url' class='small-logo' :src="product.logo_url"
+                                :alt="`${product.name} logo`">
+
+                        </div>
+                        <div class="column has-text-right">
+                            <p v-for='(licence,ind) in product.licence' :key='ind'>
+                                <span> ${ licence }</span>
+                            </p>
+                        </div>
+                    </div>
+                </header>
+                <div class="card-content ">
+                    <div class="content ">
+                        <p class="content-title title">
+                            ${ product.name }
+                        </p>
+                        <p class="content-text">
+                            Origin Country: <span class='is-bold'> ${ product.origin_country }</span>
+                        </p>
+                        <p class="content-text" v-if='product.sector.length === 1'>
+                            Sector:
+                            <span class=' tag' :key="inde" v-for='(sector, inde) in product.sector'>
+                                ${sector}
+                            </span>
+                        </p>
+                        <p class="content-text" v-else>
+                            Sectors:
+                            <span class=' tag' :key="inde" v-for='(sector, inde) in product.sector'>
+                                ${sector}
+                            </span>
+                        </p>
+                        <p class="content-text is-flex is-between">
+                            <a :href="product.official_url" rel='noopener' class="project-link"> Visit Project Site</a>
+                            <a :href="product.repository" rel='noopener' class="project-link">Project Repository</a>
+                        </p>
+                        <p class="content-text" v-if='!product.showMore'>${product.description | truncate(150)}
+                        </p>
+                        <div class="content-text" v-else>${ product.description }
+                            <p v-if="product.category.length === 1 ">Category:
+                                <span class=' tag' :key="inde" v-for='(prod_categ, inde) in product.category'>
+                                    ${prod_categ}
+                                </span>
+                            </p>
+                            <p v-else>Categories:
+                                <span class=' tag' :key="inde" v-for='(prod_categ, inde) in product.category'>
+                                    ${prod_categ}
+                                </span>
+                            </p>
+                            <p>
+                                Developed by:
+                                <span v-for='(dev,ind) in product.developers' :key='ind'>
+                                    <a :href="dev.developer_name" rel='noopener'> ${ dev.developer_name } </a>
+                                </span>
+                            </p>
+                            <p v-if='product.maintainers.length >0'>
+                                Maintained by:
+                                <span v-for='(maintainer,ind) in product.maintainers' :key='ind'>
+                                    <a :href="maintainer.url" rel='noopener'> ${ maintainer.name } </a>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    <a href="#" class="card-footer-item" v-if='!product.showMore'
+                        @click.prevent='$emit("showHide",product.name, true)'>Show
+                        More</a>
+                    <a href="#" v-else='product.showMore' class="card-footer-item"
+                        @click.prevent='$emit("showHide",product.name, false)'>Show
+                        Less</a>
+                </footer>
+            </div>
+        </div>
+    </div>
+</listview>
+{% endverbatim %}
