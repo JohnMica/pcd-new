@@ -17,6 +17,12 @@
  */
 
 /**
+  * vee-validate v3.3.0
+  * (c) 2020 Abdelrahman Awad
+  * @license MIT
+  */
+
+/**
  * vuex v3.1.3
  * (c) 2020 Evan You
  * @license MIT

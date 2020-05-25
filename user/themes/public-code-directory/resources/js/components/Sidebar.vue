@@ -12,7 +12,8 @@ export default {
       checkedLicences: [],
       checkedUsers: [],
       checkedLang: [],
-      selected: null
+      selected: null,
+      isComponentModalActive: false
     };
   },
   computed: {

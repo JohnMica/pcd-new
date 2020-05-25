@@ -1,18 +1,30 @@
 {% extends 'partials/base.html.twig' %}
 
+{% block hero %}
+<section class="hero is-medium is-gradient">
+	<div class="hero-head">
+		<div class="container">
+			{% include "partials/navbar.html.twig" %}
+		</div>
+	</div>
+	<div class="hero-body has-text-centered">
+		<div class="container">
+			<div class="columns is-centered">
+				<div class="column is-12 is-half-desktop  ">
+					{{ page.content|raw }}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% endblock %}
 {% block content %}
 <section class="section container">
 	<div class="columns is-centered">
-		<div class="column is-hidden-mobile is-3">
-			{% include "modular/sidebar.html.twig" %}
-		</div>
+		{% include "modular/sidebar.html.twig" %}
 		<div class="column is-9">
 			<div class="columns ">
-				{# <div class="column is-12 ">
-					<div class="content px-1">
-						{{ page.content|raw }}
-					</div>
-				</div> #}
 				<div class="column is-12">
 					<main class="main-content">
 						<div class="content px-1">
@@ -25,7 +37,7 @@
 							<b-tab-item label="Table View" icon="table">
 								{% include "modular/tableview.html.twig" %}
 							</b-tab-item>
-							<b-tab-item label="Worl Map" icon="map">
+							<b-tab-item label="World Map" icon="map">
 								{% include "modular/worldmap.html.twig" %}
 							</b-tab-item>
 						</b-tabs>

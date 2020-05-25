@@ -1,0 +1,77 @@
+{% extends 'partials/base.html.twig' %}
+{% block hero %}
+<section class="hero is-medium is-gradient">
+    <div class="hero-head">
+        <div class="container">
+            {% include "partials/navbar.html.twig" %}
+        </div>
+    </div>
+    <div class="hero-body has-text-centered">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-12 is-half-desktop  ">
+                    {{ page.content|raw }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container has-padding-top has-padding-bottom">
+        <div class="columns is-centered is-multiline">
+
+            {% for item in page.header.features %}
+            <div class="column is-12 features">
+                <div class="image">
+                    <object class='feature-image' data="{{ page.media[item.image].url }}"
+                        type="image/svg+xml">{{item.title}}
+                    </object>
+                </div>
+                <div class="feature">
+                    <h3 class="is-size-3">{{ item.title }}</h3>
+                    <p>{{ item.text }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="columns is-centered is-multiline has-padding-top has-padding-bottom">
+            <div class="column is-12 contributors-title">
+                <h4 class="is-size-4">Contributors</h4>
+            </div>
+            <div class="column is-12 contributor is-flex-tablet  justify-between">
+                {% for item in page.header.contributors %}
+                <div class="name">
+                    <p class="is-size-4">{{ item.name }}</h3>
+                        <p class='subtitle'>{{ item.contributor_title }}</p>
+
+                        <div class="social-media">
+                            <p>Contact details:
+                                {% if item.email %}
+                                <span>
+                                    <a href="mailto:{{ item.email }}" class='pa-2'>
+                                        <i class='fa fa-envelope-o ' aria-hidden='true'></i>
+                                    </a>
+                                </span>
+                                {% endif %}
+                                <span class='is-inline-flex align-center'>
+                                    {% for social in item.socialmedia %}
+                                    <a href="{{ social.link }}" rel='noopener' target='_blank' class='pa-2'>
+                                        <i class="{{social.image}} " aria-hidden="true"></i>
+                                    </a>
+                                    {% endfor %}
+                                </span>
+                            </p>
+                        </div>
+                </div>
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

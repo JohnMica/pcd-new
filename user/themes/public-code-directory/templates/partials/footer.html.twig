@@ -1,70 +1,6 @@
-<footer class="footer  {% if page.template =='default' or page.template =='form' %} has-padding-top  {% endif %}"
+<footer class="footer  {% if page.template =='default' or page.template =='form' %} has-background-white {% endif %}"
     id="footer">
-    {% if page.template =='default' %}
-    <div class="has-text-centered">
-        <div class="container">
-            <p class="is-size-4">Partners</p>
-            <p>This project was possible due to the following partners.</p>
-            <div class="images">
-                <a class='footer-image' href="//publiccode.eu/" rel='noopener' target="_blank">
-                    <object class='partner-image' data="{{ url('theme://images/logos/public-code-logo.svg') }}"
-                        type="image/svg+xml">Public Code EU</object>
-                </a>
-                <a class='footer-image' href="//fsfe.org/" rel='noopener' target="_blank">
-                    <object class='partner-image' data="{{ url('theme://images/logos/fsfe-logo.svg') }}"
-                        type="image/svg+xml">Free Software Foundation Europe</object>
-                </a>
-                <a class='footer-image' href="//opusvl.com" rel='noopener' target="_blank">
-                    <object class='partner-image' data="{{ url('theme://images/logos/opusvl-black-logo.svg') }}"
-                        type="image/svg+xml">OpusVL</object>
-                </a>
-                <a class='footer-image' href="//openuk.uk/" rel='noopener' target="_blank">
-                    <object class='partner-image' data="{{ url('theme://images/logos/OpenUK-logo.svg')}}"
-                        type="image/svg+xml">OpenUK</object>
-                </a>
-            </div>
-        </div>
-        <div class="is-dark is-multiline is-centered">
-            <div class="container">
-                <div class="columns is-multiline">
-                    <div class="column is-12 is-flex justify-between">
-                        {% set image_parts = pathinfo(grav.theme.config.theme.logo) %}
-                        <a class="footer-link" href="{{ base_url == '' ? '/' : base_url }}">
-                            {% if image_parts|length > 0 %}
-                            <object class='logo mr-2' type='image/svg+xml'
-                                data="{{ url('theme://assets') }}/{{ image_parts.basename }}"
-                                alt="{{ site.title }} image">{{site.title}}</object>
-                            {{ config.site.title }}
-                            {% else %}
-                            {{ config.site.title }}
-                            {% endif %}
-                        </a>
-                        <a href="https://twitter.com/publiccodedir" class="footer-link twitter">
-                            <object data="{{url('theme://images/twitter.svg')}}" type='image/svg+xml' class="logo"
-                                alt='Twitter logo'>
-                                Twitter logo
-                            </object>
-                        </a>
-                    </div>
-                    <div class="column is-12 is-flex justify-end">
-                        {% set footer_pages = page.collection({'items': {'@root.descendants':''}}) %}
-                        {% for page in footer_pages %}
-                        {% if page.visible and page.header.in_footer_menu %}
-                        <a href="{{page.url}}" class="footer-link">{{page.title}}</a>
-                        {% endif %}
-                        {% for p in footer_pages.children %}
-                        {% if p.visible and p.header.in_footer_menu %}
-                        <a href="{{p.url}}" class="footer-link">{{p.title}}</a>
-                        {% endif %}
 
-                        {% endfor %}
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% else %}
     <div class="is-dark has-text-white has-text-centered">
         <div class="container">
             <div class="columns is-centered is-multiline">
@@ -104,6 +40,5 @@
             </div>
         </div>
     </div>
-    {% endif %}
 
 </footer>

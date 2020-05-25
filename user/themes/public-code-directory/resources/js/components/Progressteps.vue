@@ -8,7 +8,7 @@ export default {
   },
   data() {
     return {
-      currentStep: 5,
+      currentStep: 1,
       submitSuccess: false,
       projectDevelopersModalActive: false,
       projectMaintainersModalActive: false,

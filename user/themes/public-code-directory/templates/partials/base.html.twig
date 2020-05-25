@@ -14,27 +14,42 @@
 
     {# Wrap content in #app to allow vue components #}
     <div id="app">
-        {% if page.template == 'default' or page.template == 'form' or page.template == 'formdata' or page.template == 'join' %}
         {% block hero %} {% endblock %}
-        {% else %}
-        {% include 'partials/navbar.html.twig' %}
-        {% endif %}
-        {% block content %}{% endblock %}
-    </div>
-    {% include 'partials/footer.html.twig' %}
-    <div class="beta-wrapper beta-bottom-right ">
-        <div class="beta beta-blue  ">
-            <a class="beta-link " href="https://github.com/OpenUK/publiccode.directory-web-interface/issues/new"
-                target="_blank" rel="noopener">
-                <span class="beta-text">
-                    This is a Beta release.
-                </span>
-                <span class="beta-text">
-                    For any issues please raise a ticket on GitHub
-                </span>
-            </a>
+
+        {% block content %}
+
+        {% endblock %}
+        {% if page.template =='default' %}
+        <div class="has-text-centered has-padding-top has-padding-bottom">
+            <div class="container">
+                <p class="is-size-4">Partners</p>
+                <p>This project was possible due to the following partners.</p>
+                <div class="images">
+                    <a class='footer-image' href="//publiccode.eu/" rel='noopener' target="_blank">
+                        <object class='partner-image' data="{{ url('theme://images/logos/public-code-logo.svg') }}"
+                            type="image/svg+xml">Public Code EU</object>
+                    </a>
+                    <a class='footer-image' href="//fsfe.org/" rel='noopener' target="_blank">
+                        <object class='partner-image' data="{{ url('theme://images/logos/fsfe-logo.svg') }}"
+                            type="image/svg+xml">Free Software Foundation Europe</object>
+                    </a>
+                    <a class='footer-image' href="//opusvl.com" rel='noopener' target="_blank">
+                        <object class='partner-image' data="{{ url('theme://images/logos/opusvl-black-logo.svg') }}"
+                            type="image/svg+xml">OpusVL</object>
+                    </a>
+                    <a class='footer-image' href="//openuk.uk/" rel='noopener' target="_blank">
+                        <object class='partner-image' data="{{ url('theme://images/logos/OpenUK-logo.svg')}}"
+                            type="image/svg+xml">OpenUK</object>
+                    </a>
+                </div>
+            </div>
         </div>
+        {% endif %}
+        {% include 'partials/footer.html.twig' %}
+
     </div>
+    {% do assets.addJs('https://use.fontawesome.com/releases/v5.13.0/js/all.js', 120) %}
+    {% do assets.addJs('https://use.fontawesome.com/releases/v5.13.0/js/v4-shims.js', 120) %}
     {{ assets.js()|raw }}
     {{ assets.js('bottom')|raw }}
     <!-- Matomo -->

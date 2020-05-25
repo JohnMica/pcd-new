@@ -1,0 +1,57 @@
+title: Home Page
+"@extends": default
+
+form:
+  fields:
+    tabs:
+      fields:
+        content:
+          fields:
+            header.features:
+              type: list
+              label: Features
+              fields:
+                .image:
+                  folder: "self@"
+                  type: filepicker
+                  toggleable: true
+                  preview_images: true
+                  label: Select Feature Image
+                .title:
+                  type: text
+                  label: Feature title
+                .text:
+                  type: textarea
+                  label: Feature Text
+                .link:
+                  type: text
+                  label: Feature link
+                .link_text:
+                  type: text
+                  label: Button Text
+            header.contributors:
+              type: list
+              label: Contributors
+              fields:
+                .name:
+                  type: text
+                  label: Contributor name
+                .email:
+                  type: email
+                  label: Contributor email
+                .website:
+                  type: text
+                  label: Contributor website
+                .contributor_title:
+                  type: text
+                  label: Contributor Title
+                .socialmedia:
+                  type: list
+                  label: Contributor Social Media
+                  fields:
+                    .image:
+                      type: iconpicker
+                      label: Socia Media icon
+                    .link:
+                      type: text
+                      label: Social Media URL

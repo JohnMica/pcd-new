@@ -9,6 +9,7 @@ import Totalproducts from './components/Totalproducts.vue'
 import Worldmap from './components/Worldmap.vue'
 import SidebarFilters from './components/Sidebar.vue'
 import Progressteps from './components/Progressteps.vue'
+import MobileFilters from './components/MobileFilters.vue'
 
 window.Vue = require('vue')
 
@@ -38,6 +39,7 @@ new Vue({
     Tableview,
     NavBar,
     SidebarFilters,
+    MobileFilters,
   },
   delimiters: ['${', '}'],
 })
