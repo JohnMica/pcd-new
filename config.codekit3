@@ -31727,14 +31727,6 @@
 		"oAP": "/user/themes/public-code-directory/templates/modular/listview.html.twig",
 		"oF": 0
 		},
-	"/user/themes/public-code-directory/templates/modular/mobilefilters.html.twig": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/user/themes/public-code-directory/templates/modular/mobilefilters.html.twig",
-		"oF": 0
-		},
 	"/user/themes/public-code-directory/templates/modular/progressteps.html.twig": {
 		"cB": 0,
 		"ft": 8192,
