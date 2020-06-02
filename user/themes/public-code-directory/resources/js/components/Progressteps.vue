@@ -1,14 +1,16 @@
 <script>
 import { ValidationObserver, ValidationProvider, validate } from "vee-validate";
+import axios from "axios";
 export default {
   name: "Progressteps",
+  delimiters: ["${", "}"],
   components: {
     ValidationObserver,
     ValidationProvider
   },
   data() {
     return {
-      currentStep: 1,
+      currentStep: 4,
       submitSuccess: false,
       projectDevelopersModalActive: false,
       projectMaintainersModalActive: false,
@@ -50,27 +52,28 @@ export default {
         ],
         projectUsers: [
           {
-            name: "",
-            website: "",
-            logoUrl: "",
-            category: "",
+            name: "name",
+            website: "https://google.com",
+            logoUrl: "https://google.com",
+            category: "categoru",
             location: {
-              longitude: "",
-              latitude: ""
+              longitude: "54.23223",
+              latitude: "-1.23232"
             }
           }
         ]
       },
       tempFormData: {
-        name: "",
-        website: "",
-        logoUrl: "",
-        category: "",
+        name: "name",
+        website: "https://google.com",
+        logoUrl: "https://google.com",
+        category: "categoru",
         location: {
-          longitude: "",
-          latitude: ""
+          longitude: "54.23223",
+          latitude: "-1.23232"
         }
-      }
+      },
+      formSubmissionResult: null
     };
   },
   computed: {},
@@ -171,22 +174,32 @@ export default {
       };
     },
     onSubmit() {
-      console.log(this.form);
-      this.sendingForm = true;
-      if (this.currentStep === 4) {
-        this.fourthStepCompleted = true;
-        this.firstStepVisible = false;
-        this.secondStepVisible = false;
-        this.thirdStepVisible = false;
-        this.fourthStepVisible = false;
-        this.submitSuccess = true;
-        this.sendingForm = false;
-        requestAnimationFrame(() => {
-          this.$refs.form.reset();
-        });
+      let that = this;
+      if (that.currentStep === 5) {
+        this.sendingForm = true;
+        axios
+          .post("join-us", {
+            headers: {},
+            method: "POST",
+            body: JSON.stringify(that.form)
+          })
+          .then(res => {
+            setTimeout(() => {
+              // this is just to reset the form, set the loading to false and display the thank you message
+              that.submitSuccess = true;
+              that.sendingForm = false;
+              that.currentStep = 6;
+              requestAnimationFrame(() => {
+                that.$refs.join.reset();
+              });
+            }, 500);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+
         return;
       }
-
       this.currentStep++;
     }
   }

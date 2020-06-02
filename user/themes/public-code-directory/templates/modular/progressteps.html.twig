@@ -34,7 +34,7 @@
                     <p class="step-title">Developers</p>
                 </div>
             </li>
-            <li class="step-item " :class="{'is-warning is-active':currentStep===4, 'is-link is-active':currentStep>3}">
+            <li class="step-item " :class="{'is-warning is-active':currentStep===4, 'is-link is-active':currentStep>4}">
                 <div class="step-marker">
                     <span class="icon" v-if='currentStep>4'>
                         <i class="fa fa-check"></i>
@@ -44,7 +44,7 @@
                     <p class="step-title">Users</p>
                 </div>
             </li>
-            <li class="step-item " :class="{'is-warning is-active':sendingForm, 'is-link is-active':submitSuccess}">
+            <li class="step-item " :class="{'is-warning is-active':currentStep===5, 'is-link is-active':submitSuccess}">
                 <div class="step-marker">
                     <span class="icon" v-if='submitSuccess'>
                         <i class="fa fa-flag"></i>
@@ -55,8 +55,9 @@
                 </div>
             </li>
         </ul>
-        <validation-observer ref='form' v-slot="{ handleSubmit }">
-            <form method="post" accept-charset="UTF-8" @submit.prevent="handleSubmit(onSubmit)">
+        <validation-observer tag='div' ref='join' v-slot="{ handleSubmit }">
+            <form method="post" accept-charset="UTF-8" @submit.prevent="handleSubmit(onSubmit)" id='formbuilder'
+                action='/pcd/join-us'>
 
                 <div class="step" v-if="currentStep === 1">
                     <validation-provider rules="name:3" name="Name" v-slot="{ errors, invalid, valid }">
@@ -84,8 +85,6 @@
                     </b-field>
 
                 </div>
-
-
 
                 <div class="step" v-else-if='currentStep === 2'>
                     <validation-provider rules="name:3" name="Project Name" v-slot="{ errors, invalid, valid }">
@@ -224,8 +223,6 @@
                         <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
                     </validation-provider>
                 </div>
-
-
 
                 <div class="step" v-else-if='currentStep === 3'>
                     <b-field label='Developers'>
@@ -373,8 +370,6 @@
 
                 </div>
 
-
-
                 <div class="step" v-else-if='currentStep === 4'>
                     <b-field label='Users'>
                         <b-button @click.prevent='addUsers'>Add Users</b-button>
@@ -390,7 +385,7 @@
                             <b-field label="Users Name" data-grav-field="text" data-grav-disabled="true"
                                 data-grav-default="null">
                                 <b-input type="text" v-model='dev.name' maxlength="50"
-                                    :name="`form[projectUsers][${ind}][name]`" value="" required="required">
+                                    :name="`data[projectUsers][${ind}][name]`" value="" required="required">
                                 </b-input>
                             </b-field>
                             <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
@@ -403,7 +398,7 @@
                                     <b-field label="Users Website" data-grav-field="text" data-grav-disabled="true"
                                         data-grav-default="null">
                                         <b-input type="text" v-model='dev.website' maxlength="50"
-                                            :name="`form[projectUsers][${ind}][website]`" value="" required="required">
+                                            :name="`data[projectUsers][${ind}][website]`" value="" required="required">
                                         </b-input>
                                     </b-field>
                                 </b-tooltip>
@@ -418,7 +413,7 @@
                                     <b-field label="Users Logo" data-grav-field="text" data-grav-disabled="true"
                                         data-grav-default="null">
                                         <b-input type="text" v-model='dev.logoUrl' maxlength="50"
-                                            :name="`form[projectUsers][${ind}][logoUrl]`" value="" required="required">
+                                            :name="`data[projectUsers][${ind}][logoUrl]`" value="" required="required">
                                         </b-input>
                                     </b-field>
                                 </b-tooltip>
@@ -433,7 +428,7 @@
                                     <b-field label="Users Category" data-grav-field="text" data-grav-disabled="true"
                                         data-grav-default="null">
                                         <b-input type="text" v-model='dev.category' maxlength="50"
-                                            :name="`form[projectUsers][${ind}][category]`" value="" required="required">
+                                            :name="`data[projectUsers][${ind}][category]`" value="" required="required">
                                         </b-input>
                                     </b-field>
                                 </b-tooltip>
@@ -445,7 +440,7 @@
                                 <b-tooltip label="eg: Latitude required for map placement">
                                     <b-field label="User Location Latitude">
                                         <b-input type="text" v-model='dev.location.latitude' maxlength="10"
-                                            :name="`form[projectUsers][${ind}][location][latitude]`" value=""
+                                            :name="`data[projectUsers][${ind}][location][latitude]`" value=""
                                             required="required">
                                         </b-input>
 
@@ -460,7 +455,7 @@
                                 <b-tooltip label="eg: Longitude required for map placement">
                                     <b-field label="User Location Longitude">
                                         <b-input type="text" v-model='dev.location.longitude' maxlength="10"
-                                            :name="`form[projectUsers][${ind}][location][longitude]`" value=""
+                                            :name="`data[projectUsers][${ind}][location][longitude]`" value=""
                                             required="required">
                                         </b-input>
 
@@ -475,23 +470,103 @@
                     </div>
 
                 </div>
+                <div class="step" v-else-if='currentStep === 5'>
+                    <b-field label='Users'>
+                        <b-button @click.prevent='addUsers'>Add Users</b-button>
+                    </b-field>
+                    <div v-for='(dev,ind) in form.projectUsers' :key='ind'>
+                        <hr v-if='ind>=1'>
+                        <b-field label="Users Name" data-grav-field="text" data-grav-disabled="true"
+                            data-grav-default="null">
+                            <b-input type="text" v-model='dev.name' readonly maxlength="50"
+                                :name="`data[projectUsers][${ind}][name]`" value="" required="required">
+                            </b-input>
+                        </b-field>
+
+                        <div>
+                            <b-tooltip label="eg: https://example.com">
+                                <b-field label="Users Website" data-grav-field="text" data-grav-disabled="true"
+                                    data-grav-default="null">
+                                    <b-input type="text" v-model='dev.website' readonly maxlength="50"
+                                        :name="`data[projectUsers][${ind}][website]`" value="" required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                        </div>
 
 
-                <b-field class=' is-between pt-5'>
+                        <div>
+                            <b-tooltip label="eg: https://example.com/logo.png">
+                                <b-field label="Users Logo" data-grav-field="text" readonly data-grav-disabled="true"
+                                    data-grav-default="null">
+                                    <b-input type="text" v-model='dev.logoUrl' maxlength="50"
+                                        :name="`data[projectUsers][${ind}][logoUrl]`" value="" required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                        </div>
+
+                        <div>
+                            <b-tooltip label="eg: Education Software, Software">
+                                <b-field label="Users Category" data-grav-field="text" data-grav-disabled="true"
+                                    data-grav-default="null">
+                                    <b-input type="text" v-model='dev.category' readonly maxlength="50"
+                                        :name="`data[projectUsers][${ind}][category]`" value="" required="required">
+                                    </b-input>
+                                </b-field>
+                            </b-tooltip>
+                        </div>
+
+                        <div>
+                            <b-tooltip label="eg: Latitude required for map placement">
+                                <b-field label="User Location Latitude">
+                                    <b-input type="text" readonly v-model='dev.location.latitude' maxlength="10"
+                                        :name="`data[projectUsers][${ind}][location][latitude]`" value=""
+                                        required="required">
+                                    </b-input>
+
+
+                                </b-field>
+                            </b-tooltip>
+                        </div>
+
+                        <div>
+                            <b-tooltip label="eg: Longitude required for map placement">
+                                <b-field label="User Location Longitude">
+                                    <b-input readonly type="text" v-model='dev.location.longitude' maxlength="10"
+                                        :name="`data[projectUsers][${ind}][location][longitude]`" value=""
+                                        required="required">
+                                    </b-input>
+
+                                </b-field>
+                            </b-tooltip>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+
+                <b-field class=' is-between pt-5' v-if='currentStep<6'>
                     <b-button outlined type="is-primary" @click.prevent='backToStep' :disabled='currentStep===1'>
                         Prev Step
                     </b-button>
-                    <button type="submit" class="button is-primary is-outlined" v-if='currentStep<5'>
+                    <button type="submit" class="button is-primary is-outlined" v-if='currentStep<4'>
                         Next Step
                     </button>
-                    <button type="submit" v-else class="button is-primary is-outlined">
+                    <button type="submit" v-else-if='currentStep===4' class="button is-primary is-outlined">
+                        Review Information
+                    </button>
+                    <button type="submit" id='submitbtn' v-else class="button is-primary is-outlined">
                         Submit Form
                     </button>
                 </b-field>
             </form>
         </validation-observer>
-        <div class="step" v-if='submitSuccess'>
-            thsnks
+        <b-loading :active.sync="sendingForm" :can-cancel="false"></b-loading>
+        <div class="step" v-show='submitSuccess'>
+            <div id="form-result">Thanks for the email. We will analyze it and add it to our databse</div>
         </div>
         <b-modal :active.sync="projectDevelopersModalActive" has-modal-card trap-focus aria-role="dialog" aria-modal>
             <div class="modal-card" style="width: auto">

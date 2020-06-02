@@ -12,7 +12,7 @@ form:
         -
             name: name
             label: Name
-            placeholder: 'Enter your name'
+            placeholder: ''
             autocomplete: 'on'
             type: text
             validate:
@@ -23,15 +23,23 @@ form:
         -
             name: email
             label: Email
-            placeholder: 'Enter your email address'
+            placeholder: ' '
             type: email
             autocomplete: 'on'
             validate:
                 required: true
         -
+            name: subject
+            label: Subject
+            placeholder: ' '
+            type: text
+            autocomplete: 'on'
+            validate:
+                required: false
+        -
             name: message
             label: 'Your Message'
-            placeholder: 'Enter your message'
+            placeholder: ' '
             type: textarea
             validate:
                 required: true
@@ -65,3 +73,5 @@ form:
 You can contact one of the partners individually at their own contact address
 
 [OpenUK](https://openuk.uk/contact-us) - [FSFE](https://fsfe.org/contact/contact.en.html) - [Public Code](https://publiccode.eu/contact)
+
+of by using the form below:

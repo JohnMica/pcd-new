@@ -11,15 +11,15 @@ queue:
 mailer:
   engine: sendmail
   smtp:
-    server: localhost
+    server: '192.168.0.14:5757'
     port: 25
     encryption: none
     user: john
-    password: null
+    password: Parola123
   sendmail:
     bin: '/usr/sbin/sendmail -bs'
 content_type: text/html
-debug: true
+debug: false
 charset: null
 cc: null
 cc_name: null

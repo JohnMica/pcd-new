@@ -33,28 +33,17 @@
         </div>
     </div>
 </section>
-
 {% endblock %}
+
 {% block content %}
-<section class="section container">
-    <div class="columns is-centered is-multiline ">
-        <div class="column is-12 is-8-desktop   ">
-            <div class="columns is-centered is-multiline has-background-white ">
-                <div class="column is-12 is-12-mobile">
-                    {# <b-tabs expanded>
-                        <b-tab-item label="Complete Form" icon="align-left" multiline class='py-3'>
-                            {% include "modular/progressteps.html.twig" %}
-                        </b-tab-item>
-                        <b-tab-item label="Upload File" icon="cloud-upload-alt" class='py-3'>
-                            {% include "forms/form.html.twig" %}
-                        </b-tab-item>
-                        <b-tab-item label="Github PR" icon="video" class='py-3'>
-                        </b-tab-item>
-                    </b-tabs> #}
-                </div>
+<section class="section ">
+    <div class="container">
+        <div class="columns is-centered is-multiline has-background-white ">
+            <div class="column is-12 is-12-mobile">
+                {% include "forms/form.html.twig" %}
             </div>
         </div>
+        <div class="columns is-compensating"></div>
     </div>
-    <div class="columns is-compensating"></div>
 </section>
 {% endblock %}

@@ -39,15 +39,36 @@
         </div>
 
         <div class="columns is-centered is-multiline has-padding-top has-padding-bottom">
+            <div class="column is-12   has-padding-top ">
+                <p class='subtitle'>This project was possible due to the following partners and contributors.</p>
+                <h4 class="is-size-4">Partners</h4>
+                <div class="images">
+                    <a class='footer-image' href="//publiccode.eu/" rel='noopener' target="_blank">
+                        <object class='partner-image' data="{{ url('theme://images/logos/public-code-logo.svg') }}"
+                            type="image/svg+xml">Public Code EU</object>
+                    </a>
+                    <a class='footer-image' href="//fsfe.org/" rel='noopener' target="_blank">
+                        <object class='partner-image' data="{{ url('theme://images/logos/fsfe-logo.svg') }}"
+                            type="image/svg+xml">Free Software Foundation Europe</object>
+                    </a>
+                    <a class='footer-image' href="//opusvl.com" rel='noopener' target="_blank">
+                        <object class='partner-image' data="{{ url('theme://images/logos/opusvl-black-logo.svg') }}"
+                            type="image/svg+xml">OpusVL</object>
+                    </a>
+                    <a class='footer-image' href="//openuk.uk/" rel='noopener' target="_blank">
+                        <object class='partner-image' data="{{ url('theme://images/logos/OpenUK-logo.svg')}}"
+                            type="image/svg+xml">OpenUK</object>
+                    </a>
+                </div>
+            </div>
             <div class="column is-12 contributors-title">
                 <h4 class="is-size-4">Contributors</h4>
             </div>
             <div class="column is-12 contributor is-flex-tablet  justify-between">
                 {% for item in page.header.contributors %}
                 <div class="name">
-                    <p class="is-size-4">{{ item.name }}</h3>
+                    <p class="is-size-5">{{ item.name }}</h3>
                         <p class='subtitle'>{{ item.contributor_title }}</p>
-
                         <div class="social-media">
                             <p>Contact details:
                                 {% if item.email %}
@@ -67,7 +88,6 @@
                             </p>
                         </div>
                 </div>
-
                 {% endfor %}
             </div>
         </div>

@@ -1,19 +1,51 @@
 {% extends 'partials/base.html.twig' %}
 
 {% block hero %}
-
-this is the hreoerer
+<section class="hero is-medium is-gradient">
+    <div class="hero-head">
+        <div class="container">
+            {% include "partials/navbar.html.twig" %}
+        </div>
+    </div>
+    <div class="hero-body has-text-centered">
+        <div class="columns is-centered is-multiline">
+            <div class="column is-12 ">
+                <h2 class="is-size-2">{{ page.title|raw }}</h2>
+            </div>
+            <div class="column is-12  ">
+                <ol class='header-join-list'>
+                    <li>
+                        <span class="number-circle">1</span>
+                        <span class='desc'>Submit a project</span>
+                    </li>
+                    <li>
+                        <span class="number-circle">2</span>
+                        <span class='desc'>We review your submission</span>
+                    </li>
+                    <li>
+                        <span class="number-circle">3</span>
+                        <span class='desc'>We include your project in our listings</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}
 
 {% block content %}
-
-<div class="columns is-centered is-multiline">
-    <div class="column is-10 is-8-desktop">
-        {{ page.content|raw }}
+<section class="section ">
+    <div class="container">
+        <div class="columns is-centered is-multiline has-background-white ">
+            <div class="column is-12 is-12-mobile">
+                {{ page.content|raw }}
+            </div>
+            <div class="column is-12 is-12-mobile">
+                {% include "forms/data.html.twig" %}
+            </div>
+        </div>
+        <div class="columns is-compensating"></div>
     </div>
-    <div class="column is-10 is-8-desktop">
-        {% include "forms/data.html.twig" %}
-    </div>
-</div>
+</section>
 
 {% endblock %}
