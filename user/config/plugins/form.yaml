@@ -13,6 +13,10 @@ files:
   filesize: 0
   accept:
     - 'image/*'
+    - json
+    - yaml
+    - jml
+    - jsn
 recaptcha:
   version: 2-checkbox
   theme: light
