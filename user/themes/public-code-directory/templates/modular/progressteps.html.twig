@@ -56,42 +56,35 @@
             </li>
         </ul>
         <validation-observer tag='div' ref='join' v-slot="{ handleSubmit }">
-            <form method="post" accept-charset="UTF-8" @submit.prevent="handleSubmit(onSubmit)" id='formbuilder'
-                action='/pcd/join-us'>
+            <form method="post" accept-charset="UTF-8" enctype="multipart/form-data"
+                @submit.prevent="handleSubmit(onSubmit)" id='formbuilder'>
 
                 <div class="step" v-if="currentStep === 1">
                     <validation-provider rules="name:3" name="Name" v-slot="{ errors, invalid, valid }">
                         <b-field label="Name">
-                            <b-input v-model="form.yourName" data-grav-field="text" name="data[yourname]" value=""
-                                type="text" required="required" data-grav-disabled="true" data-grav-default="null"
+                            <b-input v-model="form.yourName" type="text" required="required"
                                 :class='{"is-danger":invalid,"is-success":valid}'>
                             </b-input>
                         </b-field>
                         <span class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></span>
                     </validation-provider>
-                    <validation-provider rules="required|email" name="data[email]" v-slot="{ errors, valid }">
-                        <b-field label="Email" data-grav-field="text" data-grav-disabled="true"
-                            data-grav-default="null">
-                            <b-input type="email" v-model='form.emailAddress' maxlength="50" name="data[email]" value=""
+                    <validation-provider rules="required|email" v-slot="{ errors, valid }">
+                        <b-field label="Email">
+                            <b-input type="email" v-model='form.emailAddress' maxlength="50" value=""
                                 required="required">
                             </b-input>
                         </b-field>
                     </validation-provider>
-                    <b-field label="Organisation" data-grav-field="text" data-grav-disabled="true"
-                        data-grav-default="null">
-                        <b-input type="text" v-model='form.organisation' maxlength="50" name="data[organisation]"
-                            value="">
+                    <b-field label="Organisation">
+                        <b-input type="text" v-model='form.organisation' maxlength="50" value="">
                         </b-input>
                     </b-field>
-
                 </div>
 
                 <div class="step" v-else-if='currentStep === 2'>
                     <validation-provider rules="name:3" name="Project Name" v-slot="{ errors, invalid, valid }">
-                        <b-field label="Project Name" data-grav-field="text" data-grav-disabled="true"
-                            data-grav-default="null">
-                            <b-input type="text" v-model='form.projectName' maxlength="50" name="data[projectName]"
-                                value="" required="required">
+                        <b-field label="Project Name">
+                            <b-input type="text" v-model='form.projectName' maxlength="50" value="" required="required">
                             </b-input>
                         </b-field>
                         <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
@@ -100,10 +93,9 @@
                     <validation-provider rules="url_string" name="Project Website" v-slot="{ errors, invalid, valid }">
                         <div>
                             <b-tooltip label="eg: https://example.com" type="is-light" animated>
-                                <b-field label="Project Website" data-grav-field="text" data-grav-disabled="true"
-                                    data-grav-default="null">
-                                    <b-input type="text" v-model='form.projectWebsite' maxlength="50"
-                                        name="data[projectWebsite]" value="" required="required">
+                                <b-field label="Project Website">
+                                    <b-input type="text" v-model='form.projectWebsite' maxlength="50" value=""
+                                        required="required">
                                     </b-input>
                                 </b-field>
                             </b-tooltip>
@@ -113,10 +105,9 @@
 
                     <validation-provider rules="url_string" name="Repository URL" v-slot="{ errors, invalid, valid }">
                         <div>
-                            <b-field label="Repository URL" data-grav-field="text" data-grav-disabled="true"
-                                data-grav-default="null">
-                                <b-input type="text" v-model='form.projectUrl' maxlength="50" name="data[projectUrl]"
-                                    value="" required="required">
+                            <b-field label="Repository URL">
+                                <b-input type="text" v-model='form.projectUrl' maxlength="50" value=""
+                                    required="required">
                                 </b-input>
                             </b-field>
                             <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
@@ -126,10 +117,9 @@
                     <validation-provider rules="alpha_num:2" name="Project Country" v-slot="{ errors, invalid, valid }">
                         <div>
                             <b-tooltip label="eg: Canada" type="is-light" animated>
-                                <b-field label="Project Starting Country" data-grav-field="text"
-                                    data-grav-disabled="true" data-grav-default="null">
-                                    <b-input type="text" v-model='form.projectCountry' maxlength="50"
-                                        name="data[projectCountry]" value="" required="required">
+                                <b-field label="Project Starting Country">
+                                    <b-input type="text" v-model='form.projectCountry' maxlength="50" value=""
+                                        required="required">
                                     </b-input>
                                 </b-field>
                             </b-tooltip>
@@ -141,10 +131,9 @@
                         v-slot="{ errors, invalid, valid }">
                         <div>
                             <b-tooltip label="eg: EN, IT, FR, DE" type="is-light" animated>
-                                <b-field label="Project Languages" data-grav-field="text" data-grav-disabled="true"
-                                    data-grav-default="null">
-                                    <b-input type="text" v-model='form.projectLanguages' maxlength="50"
-                                        name="data[projectLanguages]" value="" required="required">
+                                <b-field label="Project Languages">
+                                    <b-input type="text" v-model='form.projectLanguages' maxlength="50" value=""
+                                        required="required">
                                     </b-input>
                                 </b-field>
                             </b-tooltip>
@@ -155,10 +144,9 @@
                     <validation-provider rules="alpha_num:3" name="Project Type" v-slot="{ errors, invalid, valid }">
                         <div>
                             <b-tooltip label="eg: website, mobile app, platform" type="is-light" animated>
-                                <b-field label="Project Type" data-grav-field="text" data-grav-disabled="true"
-                                    data-grav-default="null">
-                                    <b-input type="text" v-model='form.projectType' maxlength="50"
-                                        name="data[projectType]" value="" required="required">
+                                <b-field label="Project Type">
+                                    <b-input type="text" v-model='form.projectType' maxlength="50" value=""
+                                        required="required">
                                     </b-input>
                                 </b-field>
                             </b-tooltip>
@@ -170,10 +158,9 @@
                         v-slot="{ errors, invalid, valid }">
                         <div>
                             <b-tooltip label="eg: MIT, GPL" type="is-light" animated>
-                                <b-field label="Project Licence" data-grav-field="text" data-grav-disabled="true"
-                                    data-grav-default="null">
-                                    <b-input type="text" v-model='form.projectLicence' maxlength="50"
-                                        name="data[projectLicence]" value="" required="required">
+                                <b-field label="Project Licence">
+                                    <b-input type="text" v-model='form.projectLicence' maxlength="50" value=""
+                                        required="required">
                                     </b-input>
                                 </b-field>
                             </b-tooltip>
@@ -185,10 +172,9 @@
                         v-slot="{ errors, invalid, valid }">
                         <div>
                             <b-tooltip label="eg: Education Software, Software" type="is-light" animated>
-                                <b-field label="Project Category" data-grav-field="text" data-grav-disabled="true"
-                                    data-grav-default="null">
-                                    <b-input type="text" v-model='form.projectCategory' maxlength="50"
-                                        name="data[projectCategory]" value="" required="required">
+                                <b-field label="Project Category">
+                                    <b-input type="text" v-model='form.projectCategory' maxlength="50" value=""
+                                        required="required">
                                     </b-input>
                                 </b-field>
                             </b-tooltip>
@@ -200,10 +186,9 @@
                         v-slot="{ errors, invalid, valid }">
                         <div>
                             <b-tooltip label="eg: Local Government, Public Health" type="is-light" animated>
-                                <b-field label="Project Sector" data-grav-field="text" data-grav-disabled="true"
-                                    data-grav-default="null">
-                                    <b-input type="text" v-model='form.projectSector' maxlength="50"
-                                        name="data[projectSector]" value="" required="required">
+                                <b-field label="Project Sector">
+                                    <b-input type="text" v-model='form.projectSector' maxlength="50" value=""
+                                        required="required">
                                     </b-input>
                                 </b-field>
                             </b-tooltip>
@@ -214,10 +199,9 @@
                     <validation-provider rules="minmax:10,350" name="Project Category"
                         v-slot="{ errors, invalid, valid }">
 
-                        <b-field label="Project Description" data-grav-field="text" data-grav-disabled="true"
-                            data-grav-default="null">
-                            <b-input type="textarea" v-model='form.projectDescription' maxlength="350"
-                                name="data[projectDescription]" value="" required="required">
+                        <b-field label="Project Description">
+                            <b-input type="textarea" v-model='form.projectDescription' maxlength="350" value=""
+                                required="required">
                             </b-input>
                         </b-field>
                         <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
@@ -235,10 +219,9 @@
                             <b-button @click.prevent='removeDeveloper(ind)'>Remove Dev</b-button>
                         </b-field>
                         <validation-provider rules="name:3" name="Developer Name" v-slot="{ errors, invalid, valid }">
-                            <b-field label="Developer Name" data-grav-field="text" data-grav-disabled="true"
-                                data-grav-default="null">
+                            <b-field label="Developer Name">
                                 <b-input type="text" v-model='form.projectDevelopers[ind].name' maxlength="50"
-                                    name="data[projectDevelopers][ind][name]" value="" required="required">
+                                    nd][name]" value="" required="required">
                                 </b-input>
                             </b-field>
                             <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
@@ -248,11 +231,9 @@
                             v-slot="{ errors, invalid, valid }">
                             <div>
                                 <b-tooltip label="eg: https://example.com">
-                                    <b-field label="Developer Website" data-grav-field="text" data-grav-disabled="true"
-                                        data-grav-default="null">
+                                    <b-field label="Developer Website">
                                         <b-input type="text" v-model='form.projectDevelopers[ind].website'
-                                            maxlength="50" name="data[projectDevelopers][ind][website]" value=""
-                                            required="required">
+                                            maxlength="50" nd][website]" value="" required="required">
                                         </b-input>
                                     </b-field>
                                 </b-tooltip>
@@ -264,8 +245,7 @@
                             v-slot="{ errors, invalid, valid }">
                             <div>
                                 <b-tooltip label="eg: https://example.com/logo.png">
-                                    <b-field label="Developer Logo URL" data-grav-field="text" data-grav-disabled="true"
-                                        data-grav-default="null">
+                                    <b-field label="Developer Logo URL">
                                         <b-input type="text" v-model='form.projectDevelopers[ind].logoUrl'
                                             maxlength="50" :name="`data[projectDevelopers][${ind}][logoUrl]`" value=""
                                             required="required">
@@ -280,11 +260,9 @@
                             v-slot="{ errors, invalid, valid }">
                             <div>
                                 <b-tooltip label="eg: Education Software, Software">
-                                    <b-field label="Developer Category" data-grav-field="text" data-grav-disabled="true"
-                                        data-grav-default="null">
+                                    <b-field label="Developer Category">
                                         <b-input type="text" v-model='form.projectDevelopers[ind].category'
-                                            maxlength="50" name="data[projectDevelopers][ind][category]" value=""
-                                            required="required">
+                                            maxlength="50" nd][category]" value="" required="required">
                                         </b-input>
                                     </b-field>
                                 </b-tooltip>
@@ -307,10 +285,9 @@
 
                             <validation-provider rules="name:3" name="Maintainers Name"
                                 v-slot="{ errors, invalid, valid }">
-                                <b-field label="Maintainers Name" data-grav-field="text" data-grav-disabled="true"
-                                    data-grav-default="null">
+                                <b-field label="Maintainers Name">
                                     <b-input type="text" v-model='form.projectMaintainers[ind].name' maxlength="50"
-                                        name="data[projectMaintainers][ind][name]" value="" required="required">
+                                        nd][name]" value="" required="required">
                                     </b-input>
                                 </b-field>
                                 <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
@@ -320,11 +297,9 @@
                                 v-slot="{ errors, invalid, valid }">
                                 <div>
                                     <b-tooltip label="eg: https://example.com">
-                                        <b-field label="Maintainers Website" data-grav-field="text"
-                                            data-grav-disabled="true" data-grav-default="null">
+                                        <b-field label="Maintainers Website">
                                             <b-input type="text" v-model='form.projectMaintainers[ind].website'
-                                                maxlength="50" name="data[projectMaintainers][ind][website]" value=""
-                                                required="required">
+                                                maxlength="50" nd][website]" value="" required="required">
                                             </b-input>
                                         </b-field>
                                     </b-tooltip>
@@ -336,8 +311,7 @@
                                 v-slot="{ errors, invalid, valid }">
                                 <div>
                                     <b-tooltip label="eg: https://example.com/logo.png">
-                                        <b-field label="Maintainers Logo" data-grav-field="text"
-                                            data-grav-disabled="true" data-grav-default="null">
+                                        <b-field label="Maintainers Logo">
                                             <b-input type="text" v-model='form.projectMaintainers[ind].logoUrl'
                                                 maxlength="50" :name="`data[projectMaintainers][${ind}][logoUrl]`"
                                                 value="" required="required">
@@ -352,11 +326,9 @@
                                 v-slot="{ errors, invalid, valid }">
                                 <div>
                                     <b-tooltip label="eg: Education Software, Software">
-                                        <b-field label="Maintainers Category" data-grav-field="text"
-                                            data-grav-disabled="true" data-grav-default="null">
+                                        <b-field label="Maintainers Category">
                                             <b-input type="text" v-model='form.projectMaintainers[ind].category'
-                                                maxlength="50" name="data[projectMaintainers][ind][category]" value=""
-                                                required="required">
+                                                maxlength="50" nd][category]" value="" required="required">
                                             </b-input>
                                         </b-field>
                                     </b-tooltip>
@@ -382,8 +354,7 @@
 
 
                         <validation-provider rules="name:3" name="Users Name" v-slot="{ errors, invalid, valid }">
-                            <b-field label="Users Name" data-grav-field="text" data-grav-disabled="true"
-                                data-grav-default="null">
+                            <b-field label="Users Name">
                                 <b-input type="text" v-model='dev.name' maxlength="50"
                                     :name="`data[projectUsers][${ind}][name]`" value="" required="required">
                                 </b-input>
@@ -395,8 +366,7 @@
                             v-slot="{ errors, invalid, valid }">
                             <div>
                                 <b-tooltip label="eg: https://example.com">
-                                    <b-field label="Users Website" data-grav-field="text" data-grav-disabled="true"
-                                        data-grav-default="null">
+                                    <b-field label="Users Website">
                                         <b-input type="text" v-model='dev.website' maxlength="50"
                                             :name="`data[projectUsers][${ind}][website]`" value="" required="required">
                                         </b-input>
@@ -410,8 +380,7 @@
                             v-slot="{ errors, invalid, valid }">
                             <div>
                                 <b-tooltip label="eg: https://example.com/logo.png">
-                                    <b-field label="Users Logo" data-grav-field="text" data-grav-disabled="true"
-                                        data-grav-default="null">
+                                    <b-field label="Users Logo">
                                         <b-input type="text" v-model='dev.logoUrl' maxlength="50"
                                             :name="`data[projectUsers][${ind}][logoUrl]`" value="" required="required">
                                         </b-input>
@@ -425,8 +394,7 @@
                             v-slot="{ errors, invalid, valid }">
                             <div>
                                 <b-tooltip label="eg: Education Software, Software">
-                                    <b-field label="Users Category" data-grav-field="text" data-grav-disabled="true"
-                                        data-grav-default="null">
+                                    <b-field label="Users Category">
                                         <b-input type="text" v-model='dev.category' maxlength="50"
                                             :name="`data[projectUsers][${ind}][category]`" value="" required="required">
                                         </b-input>
@@ -476,8 +444,7 @@
                     </b-field>
                     <div v-for='(dev,ind) in form.projectUsers' :key='ind'>
                         <hr v-if='ind>=1'>
-                        <b-field label="Users Name" data-grav-field="text" data-grav-disabled="true"
-                            data-grav-default="null">
+                        <b-field label="Users Name">
                             <b-input type="text" v-model='dev.name' readonly maxlength="50"
                                 :name="`data[projectUsers][${ind}][name]`" value="" required="required">
                             </b-input>
@@ -485,8 +452,7 @@
 
                         <div>
                             <b-tooltip label="eg: https://example.com">
-                                <b-field label="Users Website" data-grav-field="text" data-grav-disabled="true"
-                                    data-grav-default="null">
+                                <b-field label="Users Website">
                                     <b-input type="text" v-model='dev.website' readonly maxlength="50"
                                         :name="`data[projectUsers][${ind}][website]`" value="" required="required">
                                     </b-input>
@@ -497,8 +463,7 @@
 
                         <div>
                             <b-tooltip label="eg: https://example.com/logo.png">
-                                <b-field label="Users Logo" data-grav-field="text" readonly data-grav-disabled="true"
-                                    data-grav-default="null">
+                                <b-field label="Users Logo" readonly>
                                     <b-input type="text" v-model='dev.logoUrl' maxlength="50"
                                         :name="`data[projectUsers][${ind}][logoUrl]`" value="" required="required">
                                     </b-input>
@@ -508,8 +473,7 @@
 
                         <div>
                             <b-tooltip label="eg: Education Software, Software">
-                                <b-field label="Users Category" data-grav-field="text" data-grav-disabled="true"
-                                    data-grav-default="null">
+                                <b-field label="Users Category">
                                     <b-input type="text" v-model='dev.category' readonly maxlength="50"
                                         :name="`data[projectUsers][${ind}][category]`" value="" required="required">
                                     </b-input>

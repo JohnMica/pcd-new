@@ -29,6 +29,7 @@
             </div>
             <div class="column is-12  join-page-content">
                 {{ page.content|raw }}
+                {% include "forms/form.html.twig"  with { form: forms('form-builder')} %}
             </div>
         </div>
     </div>
