@@ -10,7 +10,7 @@ export default {
   },
   data() {
     return {
-      currentStep: 4,
+      currentStep: 1,
       submitSuccess: false,
       projectDevelopersModalActive: false,
       projectMaintainersModalActive: false,
