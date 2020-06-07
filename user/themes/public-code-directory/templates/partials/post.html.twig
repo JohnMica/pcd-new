@@ -1,32 +1,44 @@
-<div class="box">
-    <a href="{{ post.url }}" style="color: #4a4a4a;">
-        <article class="media">
+    {% set header_image = page.header.header_image|defined(true) %}
+    {% set header_image_file = page.header.header_image_file %}
 
-            <div class="media-content">
-                <div class="content">
-                    <strong class="title is-size-5">
-                        {{ post.title }}
-                    </strong>
-                    {% if post.header.intro %}
-                    {{ post.header.intro|truncate(120)|markdown|raw }}
-                    {% else %}
-                    {{ post.summary(120) }}
-                    {% endif %}
-                    <small>
-                        {{ post.header.publish_date|nicetime() }}
-                    </small>
+
+    <div class="box">
+        <a href="{{ page.url }}" style="color: #4a4a4a;">
+            <article class="media">
+                <div class="media-content">
+                    <div class="content">
+                        <strong class="title is-size-5">
+                            {{ page.title }}
+                        </strong>
+                        {% if page.header.intro %}
+                        {{ page.header.intro|truncate(120)|markdown|raw }}
+                        {% else %}
+                        {{ page.summary(120) }}
+                        {% endif %}
+                        <small>
+                            <time class="dt-published" datetime="{{ page.date|date("c") }}">
+                                <span>{{ page.date|date("d") }}</span>
+                                <em>{{ page.date|date("M") }}</em>
+                                <em>{{ page.date|date("Y") }}</em>
+                            </time>
+                            {# {{ page.header.publish_date|nicetime() }} #}
+                        </small>
+                    </div>
                 </div>
-            </div>
+                {% if header_image %}
+                {% if header_image_file %}
+                {% set header_image_media = page.media.images[header_image_file] %}
+                {% else %}
+                {% set header_image_media = page.media.images|first %}
+                {% endif %}
+                <div class="media-right">
+                    <figure class="image">
+                        {{ header_image_media.cropZoom(100, 100).html|raw }}
+                    </figure>
+                </div>
+                {% endif %}
 
-            {% if post.header.featured_image %}
-            <div class="media-right">
-                <figure class="image">
-                    {{ post.media[post.header.featured_image].cropZoom(160, 120).html('',post.title|escape)|raw}}
-                </figure>
-            </div>
-            {% endif %}
-
-        </article>
-    </a>
-</div>
-<hr>
+            </article>
+        </a>
+    </div>
+    <hr>

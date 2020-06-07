@@ -3,7 +3,6 @@ title: 'Jelly-o brownie'
 media_order: demo_02.jpg
 in_main_menu: true
 in_footer_menu: false
-featured_image: demo_02.jpg
 intro: 'Candy canes jelly-o brownie dessert sugar plum toffee candy canes marzipan. Bear claw lemon drops jujubes lemon drops cookie cheesecake gummies. Jujubes jelly ice cream halvah muffin chocolate cake cookie danish.'
 published: true
 publish_date: '08-02-2018 13:37'

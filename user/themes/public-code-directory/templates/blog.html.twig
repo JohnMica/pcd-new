@@ -1,24 +1,50 @@
 {% extends 'partials/base.html.twig' %}
+{% block hero %}
+{% set blog_image = page.media.images|first %}
+<section class="hero is-medium {% if not blog_image %}is-gradient {% endif %}">
+    <div class="hero-head">
+        <div class="container">
+            {% include "partials/navbar.html.twig" %}
+        </div>
+    </div>
 
+    <div class="hero-body has-text-centered"
+        style="background: url({{blog_image.url}}) center center no-repeat; background-size:cover;">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-12 is-two-thirds-desktop  ">
+                    <h1 class='is-size-1'>{{page.title}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-foot"></div>
+</section>
+{% endblock %}
 {% block content %}
-
-<div class="columns is-centered">
-    <div class="column is-10 is-8-desktop">
-
-        <div class="content">
-            <h1>
-                {{ page.title }}
-            </h1>
+<section class="section container">
+    <div class="columns is-centered pt-5 is-multiline">
+        {% if config.plugins.breadcrumbs.enabled %}
+        <div class="column is-12">
+            {% include 'partials/breadcrumbs.html.twig' %}
+        </div>
+        {% endif %}
+        <div class="column is-12">
             {{ page.content|raw }}
         </div>
+        {% set collection = page.collection() %}
 
-        <hr>
-
-        {% for post in page.find('/blog').children.order('publish_date', 'desc').slice(0, 3) %}
-        {% include 'partials/post.html.twig' %}
+        {% for child in collection %}
+        <div class="column is-12">
+            {% include 'partials/post.html.twig' with {'blog':page, 'page':child, 'truncate':true} %}
+        </div>
         {% endfor %}
 
+        {% if config.plugins.pagination.enabled and collection.params.pagination %}
+        <div class="column is-12">
+            {% include 'partials/pagination.html.twig' with {'base_url':page.url, 'pagination':collection.params.pagination} %}
+        </div>
+        {% endif %}
     </div>
-</div>
-
+</section>
 {% endblock %}

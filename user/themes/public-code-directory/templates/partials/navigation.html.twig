@@ -4,13 +4,12 @@
 {% set current_page = (p.active or p.activeChild) ? 'is-active' : '' %}
 {% if p.header.in_main_menu %}
 
-{% if p.children.visible.count > 0 %}
-<div class="navbar-item has-dropdown is-hoverable">
+{% if p.children.visible.count > 0 and grav.config.theme.dropdown.enabled %}
+<div class="navbar-item  has-dropdown is-hoverable ">
     <a href="{{ p.url }}" class="navbar-link {{ p.slug }} {{ current_page }}" {% if p.template == 'external' %}
         target="_BLANK" rel="noopener" {% endif %}>
         {{ p.menu }}
     </a>
-
     <div class="navbar-dropdown is-right">
         {{ macros.nav_loop(p) }}
     </div>
@@ -26,7 +25,7 @@
 {% endfor %}
 {% endmacro %}
 
-<div class="navbar-end">
+{# <div class="navbar-end">
     {% if theme_config.dropdown.enabled %}
     {{ macros.nav_loop(pages) }}
     {% else %}
@@ -38,4 +37,4 @@
     </a>
     {% endfor %}
     {% endif %}
-</div>
+</div> #}

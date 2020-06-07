@@ -1,45 +1,75 @@
-{% extends 'partials/base.html.twig' %}
+ {% set header_image = page.media.images[page.header.header_image_file] %}
+ {% set show_header = page.header.header_image %}
+ {% extends 'partials/base.html.twig' %}
 
-{% block content %}
+ {% block hero %}
+ <section class="hero is-medium  {% if not show_header %}is-gradient {% endif %}">
+     <div class="hero-head">
+         <div class="container">
+             {% include "partials/navbar.html.twig" %}
+         </div>
+     </div>
+     <div class="hero-body has-text-centered"
+         style="background: url({{header_image.url}}) center center no-repeat; background-size:cover;">
+         <div class="container">
+             <div class="columns is-centered">
+                 <div class="column is-12 is-half-desktop  ">
+                     <h1 class='is-size-1'> {{ page.title }}</h1>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </section>
+ {% endblock %}
+ {% block content %}
+ <section class="section container">
+     <div class="columns is-centered is-multiline pt-5">
+         {% if config.plugins.breadcrumbs.enabled %}
+         <div class="column is-12">
+             {% include 'partials/breadcrumbs.html.twig' %}
+         </div>
+         {% endif %}
+         <div class="column is-12">
+             <div class="content">
+                 {% if page.header.intro %}
+                 <div class="is-size-5">
+                     {{ page.header.intro|markdown|raw }}
+                 </div>
+                 {% endif %}
+                 {{ page.content|markdown|raw }}
+             </div>
+             {% if page.header.taxonomy.tag %}
+             <div class="tags">
+                 {% for tag in page.header.taxonomy.tag %}
+                 <span class="tag">
+                     {{ tag|raw }}
+                 </span>
+                 {% endfor %}
+             </div>
+             {% endif %}
+             <small class="is-italic is-size-7 has-text-grey">
+                 Published {{ page.header.publish_date|nicetime() }}
+             </small>
 
-<div class="columns is-centered">
-    <div class="column is-10 is-8-desktop">
+         </div>
 
-        <div class="content">
-            <h1>
-                {{ page.title }}
-            </h1>
+         <div
+             class="column is-12 {% if page.isFirst %} has-text-right {% elseif not page.isFirst and not page.isLast %} is-flex justify-between {% endif %}">
+             {% if not page.isFirst %}
+             <a class="button" href="{{ page.nextSibling.url }}">
+                 <i class="fa fa-chevron-left"></i>
+                 &nbsp;{{ 'BLOG.ITEM.NEXT_POST'|t }}
+             </a>
+             {% endif %}
 
-            {% if page.header.intro %}
-            <div class="is-size-5">
-                {{ page.header.intro|markdown|raw }}
-            </div>
-            {% endif %}
+             {% if not page.isLast %}
+             <a class="button" href="{{ page.prevSibling.url }}">
+                 {{ 'BLOG.ITEM.PREV_POST'|t }}&nbsp;
+                 <i class="fa fa-chevron-right"></i>
+             </a>
+             {% endif %}
+         </div>
 
-            {% if page.header.featured_image %}
-            <figure class="image is-4by3" style="margin-left: 0; margin-right: 0;">
-                {{ page.media[page.header.featured_image].cropZoom(768, 576).html('',page.title|escape)|raw }}
-            </figure>
-            {% endif %}
-
-            {{ page.content }}
-        </div>
-
-        {% if page.header.taxonomy.tag %}
-        <div class="tags">
-            {% for tag in page.header.taxonomy.tag %}
-            <span class="tag">
-                {{ tag|raw }}
-            </span>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-        <small class="is-italic is-size-7 has-text-grey">
-            Published {{ page.header.publish_date|nicetime() }}
-        </small>
-
-    </div>
-</div>
-
-{% endblock %}
+     </div>
+ </section>
+ {% endblock %}

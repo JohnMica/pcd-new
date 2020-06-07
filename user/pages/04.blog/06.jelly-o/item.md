@@ -1,9 +1,8 @@
 ---
-title: 'Fruitcake chocolate cake'
+title: 'Jello '
 media_order: demo_01.jpg
 in_main_menu: true
 in_footer_menu: false
-featured_image: demo_01.jpg
 intro: 'I love fruitcake chocolate cake donut halvah apple pie chocolate cake. Dessert cotton candy gummies candy carrot cake liquorice macaroon. Jelly dessert apple pie cotton candy brownie carrot cake. I love cotton candy tootsie roll croissant cake topping pastry.'
 published: true
 publish_date: '15-02-2018 13:37'
