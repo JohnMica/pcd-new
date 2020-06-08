@@ -1,0 +1,29 @@
+{
+  "name": "johnmica/vue-email",
+  "type": "grav-plugin",
+  "description": "vue email",
+  "keywords": ["plugin"],
+  "homepage": "https://github.com/johnmica/grav-plugin-vue-email",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "johnmica",
+      "email": "john@threebros.design",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.1.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Grav\\Plugin\\VueEmail\\": "classes/"
+    },
+    "classmap":  ["vue-email.php"]
+  },
+  "config": {
+    "platform": {
+      "php": "7.1.3"
+    }
+  }
+}

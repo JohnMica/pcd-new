@@ -10,7 +10,7 @@ export default {
   },
   data() {
     return {
-      currentStep: 1,
+      currentStep: 4,
       submitSuccess: false,
       projectDevelopersModalActive: false,
       projectMaintainersModalActive: false,
@@ -21,33 +21,34 @@ export default {
       counterMaint: 0,
       sameAsDevs: false,
       form: {
-        yourName: "",
-        emailAddress: "",
-        organisation: "",
-        projectName: "",
-        projectWebsite: "",
-        projectUrl: "",
-        projectCountry: "",
-        prjectLanguages: [],
-        projectType: "",
-        projectLicence: "",
-        projectCategory: "",
-        projectSector: "",
-        projectDescription: "",
+        yourName: "name",
+        emailAddress: "email@test.com",
+        organisation: "organisation",
+        projectName: "project name",
+        projectWebsite: "http://test.com",
+        projectUrl: "http://test.com",
+        projectCountry: "country",
+        prjectLanguages: ["en", "de", "it"],
+        projectType: "project type",
+        projectLicence: "licnce",
+        projectCategory: "categ",
+        projectSector: "sector",
+        projectDescription:
+          "descirpieornainawin ainaoidnioandi oansiodn oiasd idi na",
         projectDevelopers: [
           {
-            name: "",
-            website: "",
-            logoUrl: "",
-            category: ""
+            name: "dev name",
+            website: "http://test.com",
+            logoUrl: "http://test.com",
+            category: "dev catego"
           }
         ],
         projectMaintainers: [
           {
-            name: "",
-            website: "",
-            logoUrl: "",
-            category: ""
+            name: "mant name",
+            website: "http://test.com",
+            logoUrl: "http://test.com",
+            category: "maint catego"
           }
         ],
         projectUsers: [
@@ -179,12 +180,17 @@ export default {
         this.sendingForm = true;
         axios
           .post("join-us", {
-            headers: {},
+            headers: {
+              "Content-Type": "application/json",
+              Accepted: "application/json"
+            },
             method: "POST",
             body: JSON.stringify(that.form)
           })
           .then(res => {
             setTimeout(() => {
+              console.log("response", res);
+
               // this is just to reset the form, set the loading to false and display the thank you message
               that.submitSuccess = true;
               that.sendingForm = false;

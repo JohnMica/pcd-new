@@ -1,4 +1,5 @@
 <?php
+
 namespace Grav\Plugin\Email;
 
 use Grav\Common\Config\Config;
@@ -192,8 +193,7 @@ class Email
                         $charset = !empty($params['charset']) ? $twig->processString($params['charset'], $vars) : null;
 
                         $message->setBody($body, $content_type, $charset);
-                    }
-                    elseif (is_array($value)) {
+                    } elseif (is_array($value)) {
                         foreach ($value as $body_part) {
                             $body_part += [
                                 'charset' => $params['charset'],
@@ -212,8 +212,7 @@ class Email
 
                             if (!$message->getBody()) {
                                 $message->setBody($body, $content_type, $charset);
-                            }
-                            else {
+                            } else {
                                 $message->addPart($body, $content_type, $charset);
                             }
                         }
@@ -281,7 +280,6 @@ class Email
                         $message->addReplyTo($address->mail, $address->name);
                     }
                     break;
-
             }
         }
 
@@ -308,9 +306,7 @@ class Email
                 'mail' => $twig->processString($value, $vars),
                 'name' => null,
             ];
-        }
-
-        else {
+        } else {
             // Cast value as array
             $value = (array) $value;
 
@@ -422,7 +418,6 @@ class Email
             $grav['log']->error($e->getMessage());
             return $e->getMessage();
         }
-
     }
 
     public static function clearQueueFailures()
@@ -447,7 +442,7 @@ class Email
             /** @var \Swift_Message $message */
             $message = unserialize(file_get_contents($final_message));
 
-            echo(sprintf(
+            echo (sprintf(
                 'Retrying "%s" to "%s"',
                 $message->getSubject(),
                 implode(', ', array_keys($message->getTo()))
@@ -456,12 +451,12 @@ class Email
             try {
                 $clean = static::cloneMessage($message);
                 $transport->send($clean);
-                echo("sent!\n");
+                echo ("sent!\n");
 
                 // DOn't want to trip up any errors from sending too fast
                 sleep(1);
             } catch (\Swift_TransportException $e) {
-                echo("ERROR: Send failed - deleting spooled message\n");
+                echo ("ERROR: Send failed - deleting spooled message\n");
             }
 
             // Remove the file
@@ -500,7 +495,6 @@ class Email
         $clean->setTo($message->getTo());
 
         return $clean;
-
     }
 
     protected static function getTransport()

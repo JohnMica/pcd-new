@@ -56,7 +56,7 @@
             </li>
         </ul>
         <validation-observer tag='div' ref='join' v-slot="{ handleSubmit }">
-            <form method="post" accept-charset="UTF-8" enctype="multipart/form-data"
+            <form method="post" action='vueEmail' accept-charset="UTF-8" enctype="multipart/form-data"
                 @submit.prevent="handleSubmit(onSubmit)" id='formbuilder'>
 
                 <div class="step" v-if="currentStep === 1">
@@ -220,8 +220,8 @@
                         </b-field>
                         <validation-provider rules="name:3" name="Developer Name" v-slot="{ errors, invalid, valid }">
                             <b-field label="Developer Name">
-                                <b-input type="text" v-model='form.projectDevelopers[ind].name' maxlength="50"
-                                    nd][name]" value="" required="required">
+                                <b-input type="text" v-model='form.projectDevelopers[ind].name' maxlength="50" value=""
+                                    required="required">
                                 </b-input>
                             </b-field>
                             <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
@@ -233,7 +233,7 @@
                                 <b-tooltip label="eg: https://example.com">
                                     <b-field label="Developer Website">
                                         <b-input type="text" v-model='form.projectDevelopers[ind].website'
-                                            maxlength="50" nd][website]" value="" required="required">
+                                            maxlength="50" value="" required="required">
                                         </b-input>
                                     </b-field>
                                 </b-tooltip>
@@ -247,8 +247,7 @@
                                 <b-tooltip label="eg: https://example.com/logo.png">
                                     <b-field label="Developer Logo URL">
                                         <b-input type="text" v-model='form.projectDevelopers[ind].logoUrl'
-                                            maxlength="50" :name="`data[projectDevelopers][${ind}][logoUrl]`" value=""
-                                            required="required">
+                                            maxlength="50" value="" required="required">
                                         </b-input>
                                     </b-field>
                                 </b-tooltip>
@@ -262,7 +261,7 @@
                                 <b-tooltip label="eg: Education Software, Software">
                                     <b-field label="Developer Category">
                                         <b-input type="text" v-model='form.projectDevelopers[ind].category'
-                                            maxlength="50" nd][category]" value="" required="required">
+                                            maxlength="50" value="" required="required">
                                         </b-input>
                                     </b-field>
                                 </b-tooltip>
@@ -287,7 +286,7 @@
                                 v-slot="{ errors, invalid, valid }">
                                 <b-field label="Maintainers Name">
                                     <b-input type="text" v-model='form.projectMaintainers[ind].name' maxlength="50"
-                                        nd][name]" value="" required="required">
+                                        value="" required="required">
                                     </b-input>
                                 </b-field>
                                 <p class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></p>
@@ -299,7 +298,7 @@
                                     <b-tooltip label="eg: https://example.com">
                                         <b-field label="Maintainers Website">
                                             <b-input type="text" v-model='form.projectMaintainers[ind].website'
-                                                maxlength="50" nd][website]" value="" required="required">
+                                                maxlength="50" value="" required="required">
                                             </b-input>
                                         </b-field>
                                     </b-tooltip>
@@ -313,8 +312,7 @@
                                     <b-tooltip label="eg: https://example.com/logo.png">
                                         <b-field label="Maintainers Logo">
                                             <b-input type="text" v-model='form.projectMaintainers[ind].logoUrl'
-                                                maxlength="50" :name="`data[projectMaintainers][${ind}][logoUrl]`"
-                                                value="" required="required">
+                                                maxlength="50" value="" required="required">
                                             </b-input>
                                         </b-field>
                                     </b-tooltip>
@@ -328,7 +326,7 @@
                                     <b-tooltip label="eg: Education Software, Software">
                                         <b-field label="Maintainers Category">
                                             <b-input type="text" v-model='form.projectMaintainers[ind].category'
-                                                maxlength="50" nd][category]" value="" required="required">
+                                                maxlength="50" value="" required="required">
                                             </b-input>
                                         </b-field>
                                     </b-tooltip>
