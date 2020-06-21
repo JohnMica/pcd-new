@@ -1,39 +1,33 @@
 {
+    "name": "getgrav/grav-plugin-email",
     "type": "grav-plugin",
-    "autoload": {
-        "psr-4": {
-            "Grav\\Plugin\\Email\\": "classes\/",
-            "Grav\\Plugin\\Console\\": "cli\/"
-        },
-        "classmap": [
-            "email.php"
-        ]
-    },
+    "description": "Email plugin for Grav CMS",
+    "keywords": ["email", "plugin", "sender"],
+    "homepage": "https://github.com/getgrav/grav-plugin-email",
+    "license": "MIT",
     "authors": [
         {
-            "email": "devs@getgrav.org",
             "name": "Team Grav",
-            "role": "Developer",
-            "homepage": "https:\/\/getgrav.org"
+            "email": "devs@getgrav.org",
+            "homepage": "https://getgrav.org",
+            "role": "Developer"
         }
     ],
-    "keywords": [
-        "email",
-        "plugin",
-        "sender"
-    ],
     "support": {
-        "issues": "https:\/\/github.com\/getgrav\/grav-plugin-email\/issues",
-        "forum": "https:\/\/getgrav.org\/forum",
-        "irc": "https:\/\/chat.getgrav.org",
-        "docs": "https:\/\/github.com\/getgrav\/grav-plugin-email\/blob\/master\/README.md"
+        "issues": "https://github.com/getgrav/grav-plugin-email/issues",
+        "irc": "https://chat.getgrav.org",
+        "forum": "https://getgrav.org/forum",
+        "docs": "https://github.com/getgrav/grav-plugin-email/blob/master/README.md"
     },
-    "description": "Email plugin for Grav CMS",
-    "license": "MIT",
-    "homepage": "https:\/\/github.com\/getgrav\/grav-plugin-email",
-    "name": "getgrav\/grav-plugin-email",
     "require": {
         "php": ">=7.1.3",
-        "swiftmailer\/swiftmailer": "~6.0",
+        "swiftmailer/swiftmailer": "~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Grav\\Plugin\\Email\\": "classes/",
+            "Grav\\Plugin\\Console\\": "cli/"
+        },
+        "classmap":  ["email.php"]
     }
 }

@@ -9,6 +9,13 @@
 
 namespace Grav\Common\Page\Medium;
 
+user_error('Grav\Common\Page\Medium\StaticResizeTrait is deprecated since Grav 1.7, use Grav\Common\Media\Traits\StaticResizeTrait instead', E_USER_DEPRECATED);
+
+/**
+ * Trait StaticResizeTrait
+ * @package Grav\Common\Page\Medium
+ * @deprecated 1.7 Use `Grav\Common\Media\Traits\StaticResizeTrait` instead
+ */
 trait StaticResizeTrait
 {
     /**

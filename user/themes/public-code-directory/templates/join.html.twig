@@ -44,7 +44,7 @@
                                 {% include "modular/progressteps.html.twig" %}
                             </b-tab-item>
                             <b-tab-item label="Upload File" icon="cloud-upload-alt" class='py-3'>
-                                {% include "forms/form.html.twig" %}
+                                {% include "forms/form.html.twig" with { forms: form('join-form')} %}
                             </b-tab-item>
                             <b-tab-item label="Via Github PR" icon="video" class='py-3'>
                                 <div class="content">

@@ -1,3 +1,19 @@
+# v1.7.0-rc.12
+## 06/08/2020
+
+1. [](#improved)
+    * Changed `Folder::hasChildren` to `Folder::countChildren`
+    * Added `Content Editor` option to user account blueprint
+1. [](#bugfix)
+    * Fixed new `Flex Page` not having correct form fields for the page type
+    * Fixed new `Flex User` erroring out on save (thanks @mikebi42)
+    * Fixed `Flex Object` request cache clear when saving object
+    * Fixed blueprint value filtering in lists [#2923](https://github.com/getgrav/grav/issues/2923)
+    * Fixed blueprint for `system.pages.hide_empty_folders` [#1925](https://github.com/getgrav/grav/issues/2925)
+    * Fixed file field in `Flex Objects` (use `Grav\Common\Flex\Types\GenericObject` instead of `FlexObject`) [flex-objects#37](https://github.com/trilbymedia/grav-plugin-flex-objects/issues/37)
+    * Fixed saving nested file fields in `Flex Objects` [flex-objects#34](https://github.com/trilbymedia/grav-plugin-flex-objects/issues/34)
+    * JSON Route of homepage with no ‘route’ set is valid [form#425](https://github.com/getgrav/grav-plugin-form/issues/425)
+
 # v1.7.0-rc.11
 ## 05/14/2020
 
@@ -365,6 +381,17 @@
     * Added support for Twig 2.11 (compatible with Twig 1.40+)
     * Optimization: Initialize debugbar only after the configuration has been loaded
     * Optimization: Combine some early Grav processors into a single one
+
+# v1.6.26
+## 06/08/2020
+
+1. [](#improved)
+    * Added new configuration option to control the supported attributes in markdown links [#2882](https://github.com/getgrav/grav/issues/2882)
+1. [](#bugfix)
+    * Fixed blueprint for `system.pages.hide_empty_folders` [#1925](https://github.com/getgrav/grav/issues/2925)
+    * JSON Route of homepage with no ‘route’ set is valid
+    * Fix case-insensitive search of location header [form#425](https://github.com/getgrav/grav-plugin-form/issues/425)
+
 
 # v1.6.25
 ## 05/14/2020

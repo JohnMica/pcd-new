@@ -7969,13 +7969,15 @@ __webpack_require__.r(__webpack_exports__);
 
       if (that.currentStep === 5) {
         this.sendingForm = true;
-        axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("join-us", {
+        axios__WEBPACK_IMPORTED_MODULE_1___default()({
           headers: {
             "Content-Type": "application/json",
-            Accepted: "application/json"
+            Accepted: "application/json",
+            "X-Requested-With": "XMLHttpRequest"
           },
           method: "POST",
-          body: JSON.stringify(that.form)
+          url: "join-us" + ".json",
+          data: JSON.stringify(that.form)
         }).then(function (res) {
           setTimeout(function () {
             console.log("response", res); // this is just to reset the form, set the loading to false and display the thank you message

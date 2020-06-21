@@ -6,6 +6,29 @@ github_content: "Please raise an issue on the database repository with your comm
 github_howto: "1. Fork the project on <a href='https://github.com/OpenUK/publiccode.directory' target='_blank' rel='noopener'>Github</a>\r\n2. Create a database metadata entry file - we call these entry.json, you may choose your own name\r\n3. Add your entry json file to our repo (via PR), to your own repository or anywhere that can be accessed via the internet\r\n4. Add a link to the **database.index.json** file pointing to your entry\r\n5. Make a pull request with the updated **database.index.json** file\r\n\r\nWhen accepted, you should see your entry in the directory"
 
 forms:
+  fomrbuilder:
+    process:
+      reset: true
+      email:
+        from:
+          mail: '{{ config.plugins.email.from }}'
+          name: 'PublicCode Directory'
+        reply_to:
+          mail: '{{ form.value.email }}'
+          name: '{{ form.value.name|e }}'
+        bcc:
+          mail: '{{ form.value.email }}'
+          name: '{{ form.value.name|e }}'
+        to:
+          mail: '{{ config.plugins.email.to }}'
+          name: 'PublicCode Directory'
+      save:
+        fileprefix: uploaded-files-
+        dateformat: Ymd-His-u
+        extension: txt
+        operation: create
+        body: "{% include 'forms/data.txt.twig' %}"
+
   join-form:
     inline_errors: true
     fields:

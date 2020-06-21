@@ -178,15 +178,16 @@ export default {
       let that = this;
       if (that.currentStep === 5) {
         this.sendingForm = true;
-        axios
-          .post("join-us", {
-            headers: {
-              "Content-Type": "application/json",
-              Accepted: "application/json"
-            },
-            method: "POST",
-            body: JSON.stringify(that.form)
-          })
+        axios({
+          headers: {
+            "Content-Type": "application/json",
+            Accepted: "application/json",
+            "X-Requested-With": "XMLHttpRequest"
+          },
+          method: "POST",
+          url: "join-us" + ".json",
+          data: JSON.stringify(that.form)
+        })
           .then(res => {
             setTimeout(() => {
               console.log("response", res);

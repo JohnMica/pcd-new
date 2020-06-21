@@ -9,9 +9,13 @@
 
 namespace Grav\Common\Page\Medium;
 
+use Grav\Common\Config\Config;
 use Grav\Common\Grav;
+use Grav\Common\Language\Language;
 use Grav\Common\Media\Interfaces\MediaCollectionInterface;
 use Grav\Common\Media\Interfaces\MediaObjectInterface;
+use Grav\Common\Media\Interfaces\MediaUploadInterface;
+use Grav\Common\Media\Traits\MediaUploadTrait;
 use Grav\Common\Page\Pages;
 use Grav\Common\Utils;
 use RocketTheme\Toolbox\ArrayTraits\ArrayAccess;
@@ -20,16 +24,17 @@ use RocketTheme\Toolbox\ArrayTraits\Export;
 use RocketTheme\Toolbox\ArrayTraits\ExportInterface;
 use RocketTheme\Toolbox\ArrayTraits\Iterator;
 
-abstract class AbstractMedia implements ExportInterface, MediaCollectionInterface
+abstract class AbstractMedia implements ExportInterface, MediaCollectionInterface, MediaUploadInterface
 {
     use ArrayAccess;
     use Countable;
     use Iterator;
     use Export;
+    use MediaUploadTrait;
 
     /** @var array */
     protected $items = [];
-    /** @var string */
+    /** @var string|null */
     protected $path;
     /** @var array */
     protected $images = [];
@@ -45,9 +50,9 @@ abstract class AbstractMedia implements ExportInterface, MediaCollectionInterfac
     /**
      * Return media path.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPath()
+    public function getPath(): ?string
     {
         return $this->path;
     }
@@ -55,7 +60,7 @@ abstract class AbstractMedia implements ExportInterface, MediaCollectionInterfac
     /**
      * @param string|null $path
      */
-    public function setPath(?string $path)
+    public function setPath(?string $path): void
     {
         $this->path = $path;
     }
@@ -164,10 +169,12 @@ abstract class AbstractMedia implements ExportInterface, MediaCollectionInterfac
      */
     public function add($name, $file)
     {
-        if (!$file) {
+        if (null === $file) {
             return;
         }
+
         $this->offsetSet($name, $file);
+
         switch ($file->type) {
             case 'image':
                 $this->images[$name] = $file;
@@ -192,12 +199,14 @@ abstract class AbstractMedia implements ExportInterface, MediaCollectionInterfac
     protected function orderMedia($media)
     {
         if (null === $this->media_order) {
-            /** @var Pages $pages */
-            $pages = Grav::instance()['pages'];
-            $page = $pages->get($this->getPath());
-
-            if ($page && isset($page->header()->media_order)) {
-                $this->media_order = array_map('trim', explode(',', $page->header()->media_order));
+            $path = $this->getPath();
+            if (null !== $path) {
+                /** @var Pages $pages */
+                $pages = Grav::instance()['pages'];
+                $page = $pages->get($path);
+                if ($page && isset($page->header()->media_order)) {
+                    $this->media_order = array_map('trim', explode(',', $page->header()->media_order));
+                }
             }
         }
 
@@ -250,6 +259,26 @@ abstract class AbstractMedia implements ExportInterface, MediaCollectionInterfac
             }
         }
 
-        return array($name, $extension, $type, $extra);
+        return [$name, $extension, $type, $extra];
+    }
+
+    protected function getGrav(): Grav
+    {
+        return Grav::instance();
+    }
+
+    protected function getConfig(): Config
+    {
+        return $this->getGrav()['config'];
+    }
+
+    protected function getLanguage(): Language
+    {
+        return $this->getGrav()['language'];
+    }
+
+    protected function clearCache(): void
+    {
+        // TODO: Implement clearCache() method.
     }
 }

@@ -1,29 +1,22 @@
 enabled: true
-from: john@threebros.design
-from_name: null
-to: john@threebros.design
-to_name: null
+from: "john@johnmica.dev"
+from_name: "John Mica"
+to: "john@johnmica.dev"
+to_name: "John Mica"
 queue:
   enabled: false
-  flush_frequency: '* * * * *'
+  flush_frequency: "* * * * *"
   flush_msg_limit: 10
   flush_time_limit: 100
 mailer:
-  engine: sendmail
+  engine: smtp
   smtp:
-    server: '192.168.0.14:5757'
-    port: 25
-    encryption: none
-    user: john
-    password: Parola123
+    server: smtp.dreamhost.com
+    port: 465
+    encryption: ssl
+    user: john@johnmica.dev
+    password: ^rCh7JzT
   sendmail:
-    bin: '/usr/sbin/sendmail -bs'
+    bin: "/usr/sbin/sendmail -bs"
 content_type: text/html
-debug: false
-charset: null
-cc: null
-cc_name: null
-bcc: null
-reply_to: john@threebros.design
-reply_to_name: null
-body: null
+debug: true

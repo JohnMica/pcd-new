@@ -14,20 +14,19 @@ namespace Grav\Common\Flex\Types\Users;
 use Grav\Common\Config\Config;
 use Grav\Common\Flex\Traits\FlexGravTrait;
 use Grav\Common\Flex\Traits\FlexObjectTrait;
+use Grav\Common\Flex\Types\Users\Traits\UserObjectLegacyTrait;
 use Grav\Common\Grav;
 use Grav\Common\Media\Interfaces\MediaCollectionInterface;
+use Grav\Common\Media\Interfaces\MediaUploadInterface;
 use Grav\Common\Page\Media;
-use Grav\Common\Page\Medium\ImageMedium;
 use Grav\Common\Page\Medium\Medium;
 use Grav\Common\Page\Medium\MediumFactory;
-use Grav\Common\Page\Medium\StaticImageMedium;
 use Grav\Common\User\Access;
 use Grav\Common\User\Authentication;
 use Grav\Common\Flex\Types\UserGroups\UserGroupCollection;
 use Grav\Common\Flex\Types\UserGroups\UserGroupIndex;
 use Grav\Common\User\Interfaces\UserInterface;
 use Grav\Common\User\Traits\UserTrait;
-use Grav\Common\Utils;
 use Grav\Framework\File\Formatter\JsonFormatter;
 use Grav\Framework\File\Formatter\YamlFormatter;
 use Grav\Framework\Flex\Flex;
@@ -36,7 +35,6 @@ use Grav\Framework\Flex\FlexObject;
 use Grav\Framework\Flex\Storage\FileStorage;
 use Grav\Framework\Flex\Traits\FlexMediaTrait;
 use Grav\Framework\Form\FormFlashFile;
-use Grav\Framework\Media\Interfaces\MediaManipulationInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use RocketTheme\Toolbox\File\FileInterface;
 use RocketTheme\Toolbox\ResourceLocator\UniformResourceLocator;
@@ -60,7 +58,7 @@ use RocketTheme\Toolbox\ResourceLocator\UniformResourceLocator;
  * @property bool $authenticated
  * @property bool $authorized
  */
-class UserObject extends FlexObject implements UserInterface, MediaManipulationInterface, \Countable
+class UserObject extends FlexObject implements UserInterface, \Countable
 {
     use FlexGravTrait;
     use FlexObjectTrait;
@@ -69,6 +67,7 @@ class UserObject extends FlexObject implements UserInterface, MediaManipulationI
         getMediaFolder as private getFlexMediaFolder;
     }
     use UserTrait;
+    use UserObjectLegacyTrait;
 
     /** @var array|null */
     protected $_uploads_original;
@@ -121,7 +120,10 @@ class UserObject extends FlexObject implements UserInterface, MediaManipulationI
         $this->defProperty('state', 'enabled');
     }
 
-    public function onPrepareRegistration()
+    /**
+     * @return void
+     */
+    public function onPrepareRegistration(): void
     {
         if (!$this->getProperty('access')) {
             /** @var Config $config */
@@ -133,6 +135,16 @@ class UserObject extends FlexObject implements UserInterface, MediaManipulationI
             $this->setProperty('groups', $groups);
             $this->setProperty('access', $access);
         }
+    }
+
+    /**
+     * Helper to get content editor will fall back if not set
+     *
+     * @return string
+     */
+    public function getContentEditor(): string
+    {
+        return $this->getProperty('content_editor', 'default');
     }
 
     /**
@@ -402,7 +414,7 @@ class UserObject extends FlexObject implements UserInterface, MediaManipulationI
      * Get value from the configuration and join it with given data.
      *
      * @param string  $name       Dot separated path to the requested value.
-     * @param array|object $value      Value to be joined.
+     * @param array|object $value Value to be joined.
      * @param string  $separator  Separator, defaults to '.'
      * @return array
      * @throws \RuntimeException
@@ -516,6 +528,8 @@ class UserObject extends FlexObject implements UserInterface, MediaManipulationI
 
     /**
      * Save user without the username
+     *
+     * @return $this
      */
     public function save()
     {
@@ -540,6 +554,59 @@ class UserObject extends FlexObject implements UserInterface, MediaManipulationI
     }
 
     /**
+     * @return array
+     */
+    public function prepareStorage(): array
+    {
+        $elements = parent::prepareStorage();
+
+        // Do not save authorization information.
+        unset($elements['authenticated'], $elements['authorized']);
+
+        return $elements;
+    }
+
+    /**
+     * @return MediaCollectionInterface
+     */
+    public function getMedia()
+    {
+        /** @var Media $media */
+        $media = $this->getFlexMedia();
+
+        // Deal with shared avatar folder.
+        $path = $this->getAvatarFile();
+        if ($path && !$media[$path] && is_file($path)) {
+            $medium = MediumFactory::fromFile($path);
+            if ($medium) {
+                $media->add($path, $medium);
+                $name = basename($path);
+                if ($name !== $path) {
+                    $media->add($name, $medium);
+                }
+            }
+        }
+
+        return $media;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMediaFolder(): ?string
+    {
+        $folder = $this->getFlexMediaFolder();
+
+        // Check for shared media
+        if (!$folder && !$this->getFlexDirectory()->getMediaFolder()) {
+            $this->_loadMedia = false;
+            $folder = $this->getBlueprint()->fields()['avatar']['destination'] ?? 'user://accounts/avatars';
+        }
+
+        return $folder;
+    }
+
+    /**
      * @param UserInterface $user
      * @param string $action
      * @param string $scope
@@ -557,86 +624,230 @@ class UserObject extends FlexObject implements UserInterface, MediaManipulationI
     }
 
     /**
+     * @return string|null
+     */
+    protected function getAvatarFile(): ?string
+    {
+        $avatars = $this->getElement('avatar');
+        if (\is_array($avatars) && $avatars) {
+            $avatar = array_shift($avatars);
+
+            return $avatar['path'] ?? null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets the associated media collection (original images).
+     *
+     * @return MediaCollectionInterface  Representation of associated media.
+     */
+    protected function getOriginalMedia()
+    {
+        $folder = $this->getMediaFolder();
+        if ($folder) {
+            $folder .= '/original';
+        }
+
+        return (new Media($folder ?? '', $this->getMediaOrder()))->setTimestamps();
+    }
+
+    /**
+     * @param array $files
+     */
+    protected function setUpdatedMedia(array $files): void
+    {
+        /** @var UniformResourceLocator $locator */
+        $locator = Grav::instance()['locator'];
+
+        $media = $this->getMedia();
+
+        $list = [];
+        $list_original = [];
+        foreach ($files as $field => $group) {
+            if ($field === '') {
+                continue;
+            }
+
+            // Load settings for the field.
+            $settings = $this->getMediaFieldSettings($field);
+
+            foreach ($group as $filename => $file) {
+                if ($file) {
+                    // File upload.
+                    $filename = $file->getClientFilename();
+
+                    /** @var FormFlashFile $file */
+                    $data = $file->jsonSerialize();
+                    unset($data['tmp_name'], $data['path']);
+                } else {
+                    // File delete.
+                    $data = null;
+                }
+
+                if ($file) {
+                    // Check file upload against media limits.
+                    $filename = $media->checkUploadedFile($file, $filename, $settings);
+                }
+
+                $self = $settings['self'];
+                if ($this->_loadMedia && $self) {
+                    $filepath = $filename;
+                } else {
+                    $filepath = "{$settings['destination']}/{$filename}";
+
+                    // For backwards compatibility we are always using relative path from the installation root.
+                    if ($locator->isStream($filepath)) {
+                        $filepath = $locator->findResource($filepath, false, true);
+                    }
+                }
+
+                // Special handling for original images.
+                if (strpos($field, '/original')) {
+                    if ($this->_loadMedia && $self) {
+                        $list_original[$filename] = [$file, $settings];
+                    }
+                    continue;
+                }
+
+                $list[$filename] = [$file, $settings];
+
+                if (null !== $data) {
+                    $data['name'] = $filename;
+                    $data['path'] = $filepath;
+
+                    $this->setNestedProperty("{$field}\n{$filepath}", $data, "\n");
+                } else {
+                    $this->unsetNestedProperty("{$field}\n{$filepath}", "\n");
+                }
+            }
+        }
+
+        $this->_uploads = $list;
+        $this->_uploads_original = $list_original;
+    }
+
+    protected function saveUpdatedMedia(): void
+    {
+        $media = $this->getMedia();
+        if (!$media instanceof MediaUploadInterface) {
+            throw new \RuntimeException('Internal error UO101');
+        }
+
+        // Upload/delete original sized images.
+        /**
+         * @var string $filename
+         * @var UploadedFileInterface|array|null $file
+         */
+        foreach ($this->_uploads_original ?? [] as $filename => $file) {
+            $filename = 'original/' . $filename;
+            if (is_array($file)) {
+                [$file, $settings] = $file;
+            } else {
+                $settings = null;
+            }
+            if ($file instanceof UploadedFileInterface) {
+                $media->copyUploadedFile($file, $filename, $settings);
+            } else {
+                $media->deleteFile($filename, $settings);
+            }
+        }
+
+        // Upload/delete altered files.
+        /**
+         * @var string $filename
+         * @var UploadedFileInterface|array|null $file
+         */
+        foreach ($this->getUpdatedMedia() as $filename => $file) {
+            if (is_array($file)) {
+                [$file, $settings] = $file;
+            } else {
+                $settings = null;
+            }
+            if ($file instanceof UploadedFileInterface) {
+                $media->copyUploadedFile($file, $filename, $settings);
+            } else {
+                $media->deleteFile($filename, $settings);
+            }
+        }
+
+        $this->setUpdatedMedia([]);
+        $this->clearMediaCache();
+    }
+
+    /**
+     * @param array $value
      * @return array
      */
-    public function prepareStorage(): array
+    protected function parseFileProperty($value)
     {
-        $elements = parent::prepareStorage();
+        if (!\is_array($value)) {
+            return $value;
+        }
 
-        // Do not save authorization information.
-        unset($elements['authenticated'], $elements['authorized']);
+        $originalMedia = $this->getOriginalMedia();
+        $resizedMedia = $this->getMedia();
 
-        return $elements;
+        $list = [];
+        foreach ($value as $filename => $info) {
+            if (!\is_array($info)) {
+                continue;
+            }
+
+            /** @var Medium|null $thumbFile */
+            $thumbFile = $resizedMedia[$filename];
+            /** @var Medium|null $imageFile */
+            $imageFile = $originalMedia[$filename] ?? $thumbFile;
+            if ($thumbFile && $imageFile) {
+                $list[$filename] = [
+                    'name' => $info['name'],
+                    'type' => $info['type'],
+                    'size' => $info['size'],
+                    'path' => $info['path'],
+                    'image_url' => $imageFile->url(),
+                    'thumb_url' =>  $thumbFile->url(),
+                    'cropData' => (object)($imageFile->metadata()['upload']['crop'] ?? [])
+                ];
+            }
+        }
+
+        return $list;
     }
 
     /**
-     * Merge two configurations together.
-     *
-     * @param array $data
-     * @return $this
-     * @deprecated 1.6 Use `->update($data)` instead (same but with data validation & filtering, file upload support).
+     * @return array
      */
-    public function merge(array $data)
+    protected function doSerialize(): array
     {
-        user_error(__CLASS__ . '::' . __FUNCTION__ . '() is deprecated since Grav 1.6, use ->update($data) method instead', E_USER_DEPRECATED);
-
-        $this->setElements($this->getBlueprint()->mergeData($this->toArray(), $data));
-
-        return $this;
+        return [
+            'type' => $this->getFlexType(),
+            'key' => $this->getKey(),
+            'elements' => $this->jsonSerialize(),
+            'storage' => $this->getMetaData()
+        ];
     }
 
     /**
-     * Return media object for the User's avatar.
-     *
-     * @return ImageMedium|StaticImageMedium|null
-     * @deprecated 1.6 Use ->getAvatarImage() method instead.
+     * @return UserGroupCollection|UserGroupIndex
      */
-    public function getAvatarMedia()
+    protected function getUserGroups()
     {
-        user_error(__CLASS__ . '::' . __FUNCTION__ . '() is deprecated since Grav 1.6, use ->getAvatarImage() method instead', E_USER_DEPRECATED);
+        $grav = Grav::instance();
 
-        return $this->getAvatarImage();
-    }
+        /** @var Flex $flex */
+        $flex = $grav['flex'];
 
-    /**
-     * Return the User's avatar URL
-     *
-     * @return string
-     * @deprecated 1.6 Use ->getAvatarUrl() method instead.
-     */
-    public function avatarUrl()
-    {
-        user_error(__CLASS__ . '::' . __FUNCTION__ . '() is deprecated since Grav 1.6, use ->getAvatarUrl() method instead', E_USER_DEPRECATED);
+        /** @var UserGroupCollection|null $groups */
+        $groups = $flex->getDirectory('user-groups');
+        if ($groups) {
+            /** @var UserGroupIndex $index */
+            $index = $groups->getIndex();
 
-        return $this->getAvatarUrl();
-    }
+            return $index;
+        }
 
-    /**
-     * Checks user authorization to the action.
-     * Ensures backwards compatibility
-     *
-     * @param string $action
-     * @return bool
-     * @deprecated 1.5 Use ->authorize() method instead.
-     */
-    public function authorise($action)
-    {
-        user_error(__CLASS__ . '::' . __FUNCTION__ . '() is deprecated since Grav 1.5, use ->authorize() method instead', E_USER_DEPRECATED);
-
-        return $this->authorize($action) ?? false;
-    }
-
-    /**
-     * Implements Countable interface.
-     *
-     * @return int
-     * @deprecated 1.6 Method makes no sense for user account.
-     */
-    public function count()
-    {
-        user_error(__CLASS__ . '::' . __FUNCTION__ . '() is deprecated since Grav 1.6', E_USER_DEPRECATED);
-
-        return \count($this->jsonSerialize());
+        return $grav['user_groups'];
     }
 
     /**
@@ -694,243 +905,5 @@ class UserObject extends FlexObject implements UserInterface, MediaManipulationI
     protected function offsetSerialize_access(?array $value): ?array
     {
         return $value;
-    }
-
-    /**
-     * @return MediaCollectionInterface
-     */
-    public function getMedia()
-    {
-        /** @var Media $media */
-        $media = $this->getFlexMedia();
-
-        // Deal with shared avatar folder.
-        $path = $this->getAvatarFile();
-        if ($path && !$media[$path] && is_file($path)) {
-            $medium = MediumFactory::fromFile($path);
-            if ($medium) {
-                $media->add($path, $medium);
-                $name = basename($path);
-                if ($name !== $path) {
-                    $media->add($name, $medium);
-                }
-            }
-        }
-
-        return $media;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getMediaFolder(): ?string
-    {
-        $folder = $this->getFlexMediaFolder();
-
-        // Check for shared media
-        if (!$folder && !$this->getFlexDirectory()->getMediaFolder()) {
-            $this->_loadMedia = false;
-            $folder = $this->getBlueprint()->fields()['avatar']['destination'] ?? 'user://accounts/avatars';
-        }
-
-        return $folder;
-    }
-
-    /**
-     * @return string|null
-     */
-    protected function getAvatarFile(): ?string
-    {
-        $avatars = $this->getElement('avatar');
-        if (\is_array($avatars) && $avatars) {
-            $avatar = array_shift($avatars);
-
-            return $avatar['path'] ?? null;
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets the associated media collection (original images).
-     *
-     * @return MediaCollectionInterface  Representation of associated media.
-     */
-    protected function getOriginalMedia()
-    {
-        $folder = $this->getMediaFolder();
-        if ($folder) {
-            $folder .= '/original';
-        }
-
-        return (new Media($folder ?? '', $this->getMediaOrder()))->setTimestamps();
-    }
-
-    /**
-     * @param array $files
-     */
-    protected function setUpdatedMedia(array $files): void
-    {
-        // For shared media folder we need to keep path for backwards compatibility.
-        $folder = $this->getMediaFolder();
-
-        $list = [];
-        $list_original = [];
-        foreach ($files as $field => $group) {
-            foreach ($group as $filename => $file) {
-                if ($file) {
-                    $filename = $file->getClientFilename();
-
-                    /** @var FormFlashFile $file */
-                    $data = $file->jsonSerialize();
-                    unset($data['tmp_name'], $data['path']);
-                } else {
-                    $data = null;
-                }
-
-                $settings = $this->getBlueprint()->schema()->getProperty($field);
-
-                // Generate random name if required
-                if ($settings['random_name'] ?? false) {
-                    $extension = pathinfo($filename, PATHINFO_EXTENSION);
-                    $data['name'] = $filename = Utils::generateRandomString(15) . '.' . $extension;
-                }
-
-                if ($this->_loadMedia) {
-                    $filepath = $filename;
-                } else {
-                    if (!$folder) {
-                        throw new \RuntimeException('No media folder support');
-                    }
-
-                    /** @var UniformResourceLocator $locator */
-                    $locator = Grav::instance()['locator'];
-                    $filepath = $locator->findResource($folder, false, true) . '/' . $filename;
-                    if ($data) {
-                        $data['path'] = $filepath;
-                    }
-                }
-
-                // Special handling for original images.
-                if (strpos($field, '/original')) {
-                    if ($this->_loadMedia) {
-                        $list_original[$filename] = $file;
-                    }
-                    continue;
-                }
-
-                $list[$filename] = $file;
-
-                if ($data) {
-                    $this->setNestedProperty("{$field}\n{$filepath}", $data, "\n");
-                } else {
-                    $this->unsetNestedProperty("{$field}\n{$filepath}", "\n");
-                }
-            }
-        }
-
-        $this->_uploads = $list;
-        $this->_uploads_original = $list_original;
-    }
-
-    protected function saveUpdatedMedia(): void
-    {
-        // Upload/delete original sized images.
-        /** @var FormFlashFile|null $file */
-        foreach ($this->_uploads_original ?? [] as $name => $file) {
-            $name = 'original/' . $name;
-            if ($file) {
-                $this->uploadMediaFile($file, $name);
-            } else {
-                $this->deleteMediaFile($name);
-            }
-        }
-
-        /**
-         * @var string $filename
-         * @var UploadedFileInterface|null $file
-         */
-        foreach ($this->getUpdatedMedia() as $filename => $file) {
-            if ($file) {
-                $this->uploadMediaFile($file, $filename);
-            } else {
-                $this->deleteMediaFile($filename);
-            }
-        }
-
-        $this->setUpdatedMedia([]);
-    }
-
-    /**
-     * @param array $value
-     * @return array
-     */
-    protected function parseFileProperty($value)
-    {
-        if (!\is_array($value)) {
-            return $value;
-        }
-
-        $originalMedia = $this->getOriginalMedia();
-        $resizedMedia = $this->getMedia();
-
-        $list = [];
-        foreach ($value as $filename => $info) {
-            if (!\is_array($info)) {
-                continue;
-            }
-
-            /** @var Medium|null $thumbFile */
-            $thumbFile = $resizedMedia[$filename];
-            /** @var Medium|null $imageFile */
-            $imageFile = $originalMedia[$filename] ?? $thumbFile;
-            if ($thumbFile && $imageFile) {
-                $list[$filename] = [
-                    'name' => $info['name'],
-                    'type' => $info['type'],
-                    'size' => $info['size'],
-                    'image_url' => $imageFile->url(),
-                    'thumb_url' =>  $thumbFile->url(),
-                    'cropData' => (object)($imageFile->metadata()['upload']['crop'] ?? [])
-                ];
-            }
-        }
-
-        return $list;
-    }
-
-    /**
-     * @return array
-     */
-    protected function doSerialize(): array
-    {
-        return [
-            'type' => $this->getFlexType(),
-            'key' => $this->getKey(),
-            'elements' => $this->jsonSerialize(),
-            'storage' => $this->getMetaData()
-        ];
-    }
-
-    /**
-     * @return UserGroupCollection|UserGroupIndex
-     */
-    protected function getUserGroups()
-    {
-        $grav = Grav::instance();
-
-        /** @var Flex $flex */
-        $flex = $grav['flex'];
-
-        /** @var UserGroupCollection|null $groups */
-        $groups = $flex->getDirectory('user-groups');
-        if ($groups) {
-            /** @var UserGroupIndex $index */
-            $index = $groups->getIndex();
-
-            return $index;
-        }
-
-        return $grav['user_groups'];
     }
 }

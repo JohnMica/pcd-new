@@ -117,6 +117,10 @@ class Media extends AbstractMedia
         foreach ($media as $name => $types) {
             // First prepare the alternatives in case there is no base medium
             if (!empty($types['alternative'])) {
+                /**
+                 * @var string|int $ratio
+                 * @var array $alt
+                 */
                 foreach ($types['alternative'] as $ratio => &$alt) {
                     $alt['file'] = MediumFactory::fromFile($alt['file']);
 
@@ -216,10 +220,10 @@ class Media extends AbstractMedia
     }
 
     /**
-     * @return string
+     * @return string|null
      * @deprecated 1.6 Use $this->getPath() instead.
      */
-    public function path()
+    public function path(): ?string
     {
         return $this->getPath();
     }

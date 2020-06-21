@@ -11,8 +11,6 @@ return array(
     'ParsedownExtra' => array($vendorDir . '/erusev/parsedown-extra'),
     'Parsedown' => array($vendorDir . '/erusev/parsedown'),
     'PHPExif' => array($vendorDir . '/miljar/php-exif/lib'),
-    'PHPDocsMD' => array($vendorDir . '/victorjonsson/markdowndocs/src'),
     'Gregwar\\Image' => array($vendorDir . '/gregwar/image'),
     'Gregwar\\Cache' => array($vendorDir . '/gregwar/cache'),
-    'Behat\\Gherkin' => array($vendorDir . '/behat/gherkin/src'),
 );
