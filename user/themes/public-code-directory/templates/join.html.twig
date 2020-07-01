@@ -39,16 +39,16 @@
             <div class="column is-12     ">
                 <div class="columns is-centered is-multiline has-background-white ">
                     <div class="column is-12 is-12-mobile">
-                        <b-tabs expanded>
+                        <b-tabs expanded type='is-boxed'>
                             <b-tab-item label="Complete Form" icon="align-left" multiline class='py-3'>
                                 {% include "modular/progressteps.html.twig" %}
                             </b-tab-item>
                             <b-tab-item label="Upload File" icon="cloud-upload-alt" class='py-3'>
-                                {% include "forms/form.html.twig" with { forms: form('join-form')} %}
+                                {% include "forms/form.html.twig" with { form: forms('join-form')} %}
                             </b-tab-item>
                             <b-tab-item label="Via Github PR" icon="video" class='py-3'>
                                 <div class="content">
-                                    {{page.header.github_content}}
+                                    {{page.header.github_content|markdown|raw}}
                                 </div>
                                 <div class="content">
                                     {{page.header.github_howto|markdown|raw}}

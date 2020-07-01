@@ -49,7 +49,7 @@ extend('alpha_num', {
     return value.length >= length
   },
   params: ['length'],
-  message: 'The {_field_} field must have at least {length} characters',
+  message: 'The {_field_} field must have at least {length} language',
 })
 extend('minmax', {
   validate(value, { min, max }) {

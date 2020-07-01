@@ -6,21 +6,18 @@ logo_text: PCD
 body_classes: null
 content_padding: true
 twofa_enabled: false
-log_viewer_files:
-  - grav
-  - email
 sidebar:
   activate: tab
   hover_delay: 100
   size: auto
 dashboard:
   days_of_stats: 7
-widgets:
-  dashboard-maintenance: true
-  dashboard-statistics: true
-  dashboard-notifications: true
-  dashboard-feed: true
-  dashboard-pages: true
+widgets_display:
+  dashboard-maintenance: 'true'
+  dashboard-statistics: 'true'
+  dashboard-notifications: 'true'
+  dashboard-feed: 'true'
+  dashboard-pages: 'true'
 pages:
   show_parents: both
   show_modular: true
@@ -51,9 +48,62 @@ popularity:
     daily: '30'
     monthly: '12'
     visitors: '20'
+whitelabel:
+  quicktray_recompile: true
+  codemirror_theme: paper
+  codemirror_fontsize: md
+  codemirror_md_font: sans
+  logo_custom: {  }
+  logo_login: {  }
+  color_scheme:
+    accents:
+      primary-accent: update
+      secondary-accent: logo
+      tertiary-accent: critical
+    colors:
+      logo-bg: '#3696d1'
+      logo-link: '#ffffff'
+      nav-bg: '#ffffff'
+      nav-text: '#70798a'
+      nav-link: '#5b6270'
+      nav-selected-bg: '#edf2f6'
+      nav-selected-link: '#4b505c'
+      nav-hover-bg: '#cadbeb'
+      nav-hover-link: '#5b6270'
+      toolbar-bg: '#ffffff'
+      toolbar-text: '#636468'
+      page-bg: '#EDF2F6'
+      page-text: '#929699'
+      page-link: '#3EA7E6'
+      content-bg: '#ffffff'
+      content-text: '#787b7d'
+      content-link: '#3EA7E6'
+      content-link2: '#3cb8ba'
+      content-header: '#636468'
+      content-tabs-bg: '#f0f0f0'
+      content-tabs-text: '#929699'
+      button-bg: '#3EA7E6'
+      button-text: '#ffffff'
+      notice-bg: '#f24d77'
+      notice-text: '#ffffff'
+      update-bg: '#3cb8ba'
+      update-text: '#ffffff'
+      critical-bg: '#f45857'
+      critical-text: '#ffffff'
+    name: null
+  custom_footer: null
+  custom_css: null
+  custom_presets: null
+log_viewer_files:
+  - grav
+  - email
+widgets:
+  dashboard-maintenance: true
+  dashboard-statistics: true
+  dashboard-notifications: true
+  dashboard-feed: true
+  dashboard-pages: true
 show_beta_msg: null
-hide_page_types: null
-hide_modular_page_types: null
 pagemedia:
   resize_width: 0
   resize_height: 0

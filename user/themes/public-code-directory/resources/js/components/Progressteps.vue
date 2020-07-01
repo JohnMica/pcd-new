@@ -1,6 +1,11 @@
 <script>
 import { ValidationObserver, ValidationProvider, validate } from "vee-validate";
 import axios from "axios";
+const qs = require("qs");
+const transformRequest = (jsonData = {}) =>
+  Object.entries(jsonData)
+    .map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
+    .join("&");
 export default {
   name: "Progressteps",
   delimiters: ["${", "}"],
@@ -10,7 +15,7 @@ export default {
   },
   data() {
     return {
-      currentStep: 4,
+      currentStep: 5,
       submitSuccess: false,
       projectDevelopersModalActive: false,
       projectMaintainersModalActive: false,
@@ -21,14 +26,14 @@ export default {
       counterMaint: 0,
       sameAsDevs: false,
       form: {
-        yourName: "name",
+        name: "name",
         emailAddress: "email@test.com",
         organisation: "organisation",
         projectName: "project name",
         projectWebsite: "http://test.com",
         projectUrl: "http://test.com",
         projectCountry: "country",
-        prjectLanguages: ["en", "de", "it"],
+        projectLanguages: "en, it, de",
         projectType: "project type",
         projectLicence: "licnce",
         projectCategory: "categ",
@@ -77,7 +82,14 @@ export default {
       formSubmissionResult: null
     };
   },
-  computed: {},
+  computed: {
+    randomNonce() {
+      return (Math.random() * 1e32).toString(24);
+    },
+    randomId() {
+      return (Math.random() * 1e32).toString(20);
+    }
+  },
   methods: {
     backToStep() {
       if (this.currentStep === 1) {
@@ -178,16 +190,15 @@ export default {
       let that = this;
       if (that.currentStep === 5) {
         this.sendingForm = true;
-        axios({
-          headers: {
-            "Content-Type": "application/json",
-            Accepted: "application/json",
-            "X-Requested-With": "XMLHttpRequest"
-          },
-          method: "POST",
-          url: "join-us" + ".json",
-          data: JSON.stringify(that.form)
-        })
+        const ajaxForm = $("#formbuilder");
+        axios
+          .post("forms/formbuilder", ajaxForm.serialize(), {
+            headers: {
+              "content-type": "application/x-www-form-urlencoded",
+              Accept: "application/json",
+              "X-Requested-With": "XMLHttpRequest"
+            }
+          })
           .then(res => {
             setTimeout(() => {
               console.log("response", res);
@@ -197,12 +208,27 @@ export default {
               that.sendingForm = false;
               that.currentStep = 6;
               requestAnimationFrame(() => {
-                that.$refs.join.reset();
+                that.$refs.formbuilder.reset();
               });
             }, 500);
           })
           .catch(error => {
-            console.log(error);
+            if (error.response) {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+              console.error("error.response", error.response);
+              that.sendingForm = false;
+            } else if (error.request) {
+              // The request was made but no response was received
+              // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+              // http.ClientRequest in node.js
+              console.error("error.request", error.request);
+              that.sendingForm = false;
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.error("Error", error.message);
+              that.sendingForm = false;
+            }
           });
 
         return;
@@ -215,5 +241,13 @@ export default {
 <style lang="scss">
 .field.is-between {
   justify-content: space-between;
+}
+.field {
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+  .label {
+    display: inline-flex;
+    align-items: center;
+  }
 }
 </style>

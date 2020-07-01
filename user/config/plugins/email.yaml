@@ -1,8 +1,8 @@
 enabled: true
-from: "john@johnmica.dev"
-from_name: "John Mica"
-to: "john@johnmica.dev"
-to_name: "John Mica"
+from: pcd-9976c7@inbox.mailtrap.io
+from_name: null
+to: pcd-9976c7@inbox.mailtrap.io
+to_name: null
 queue:
   enabled: false
   flush_frequency: "* * * * *"
@@ -11,12 +11,19 @@ queue:
 mailer:
   engine: smtp
   smtp:
-    server: smtp.dreamhost.com
-    port: 465
-    encryption: ssl
-    user: john@johnmica.dev
-    password: ^rCh7JzT
+    server: smtp.mailtrap.io
+    port: 2525
+    encryption: tls
+    user: 49aba7d99a80b9
+    password: 24eefd06274f5e
   sendmail:
-    bin: "/usr/sbin/sendmail -bs"
+    bin: null
 content_type: text/html
 debug: true
+charset: null
+cc: pcd-9976c7@inbox.mailtrap.io
+cc_name: null
+bcc: pcd-9976c7@inbox.mailtrap.io
+reply_to: pcd-9976c7@inbox.mailtrap.io
+reply_to_name: null
+body: null

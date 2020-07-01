@@ -1,4 +1,5 @@
 <?php
+
 namespace Grav\Plugin;
 
 use Grav\Common\Data\Data;
@@ -68,7 +69,6 @@ class EmailPlugin extends Plugin
             if (!empty($current_pw) && empty($new_pw)) {
                 $obj->set('mailer.smtp.password', $current_pw);
             }
-
         }
     }
 
@@ -138,11 +138,11 @@ class EmailPlugin extends Plugin
         $message = $this->email->buildMessage($params, $vars);
 
         if (isset($params['attachments'])) {
-            $filesToAttach = (array)$params['attachments'];
+            $filesToAttach = (array) $params['attachments'];
             if ($filesToAttach) foreach ($filesToAttach as $fileToAttach) {
                 $filesValues = $form->value($fileToAttach);
 
-                if ($filesValues) foreach($filesValues as $fileValues) {
+                if ($filesValues) foreach ($filesValues as $fileValues) {
                     if (isset($fileValues['file'])) {
                         $filename = $fileValues['file'];
                     } else {
@@ -170,5 +170,4 @@ class EmailPlugin extends Plugin
         $index_keys = range(0, count($arr) - 1);
         return $keys !== $index_keys;
     }
-
 }

@@ -1,6 +1,7 @@
 **/**/node_modules
 user/accounts
 user/data/flex/indexes
+user/data
 cache
 tmp
 *.log

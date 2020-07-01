@@ -1,11 +1,11 @@
 enabled: true
 built_in_css: true
-inline_css: true
+inline_css: false
 refresh_prevention: true
-client_side_validation: true
+client_side_validation: false
 inline_errors: false
 files:
-  multiple: false
+  multiple: true
   limit: 10
   destination: self@
   avoid_overwriting: true
@@ -13,10 +13,9 @@ files:
   filesize: 0
   accept:
     - 'image/*'
-    - json
-    - yaml
-    - jml
-    - jsn
+    - .json
+    - .yaml
+    - .yml
 recaptcha:
   version: 2-checkbox
   theme: light
