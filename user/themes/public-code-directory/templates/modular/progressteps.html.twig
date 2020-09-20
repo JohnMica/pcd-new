@@ -60,16 +60,15 @@
             </div>
         </div>
         <validation-observer tag='div' ref='formbuilder' v-slot="{ handleSubmit }">
-            <form method="post" action='/pcd/join-us' name='formbuilder' id='formbuilder'
-                @submit.prevent="handleSubmit(onSubmit)" id='formbuilder'>
-                <b-input type='hidden' name='__form-name__' value='formbuilder' autocomplete='off'></b-input>
-                <b-input type='hidden' name='form-nonce' :value='randomNonce' autocomplete='off'></b-input>
-                <b-input type='hidden' name='__unique_form_id__' :value='randomId' autocomplete='off'></b-input>
+            <form method="post" action='/pcd/join-us' name='formbuilder' @submit.prevent="handleSubmit(onSubmit)"
+                id='formbuilder'>
+
                 <div class="step" v-if="currentStep === 1">
                     <validation-provider tag='div' rules="name:3" name="Name" v-slot="{ errors, invalid, valid }">
                         <b-field label="Name">
-                            <b-input v-model="form.yourName" type="text" required
-                                :class='{"is-danger":invalid,"is-success":valid}' name='data[name]' :value='form.name'>
+                            <b-input v-model="form.sendername" type="text" required
+                                :class='{"is-danger":invalid,"is-success":valid}' name='data[sendername]'
+                                :value='form.sendername'>
                             </b-input>
                         </b-field>
                         <span class='has-text-danger ' v-if='errors.length'><small>${ errors[0] }</small></span>

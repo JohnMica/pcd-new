@@ -4,17 +4,17 @@ import L, { latLng } from "leaflet";
 import { LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
 import "leaflet/dist/leaflet.css";
 
-import { Icon } from "leaflet";
+// import { Icon } from "leaflet";
 
-delete Icon.Default.prototype._getIconUrl;
-Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "/pcd/user/themes/public-code-directory/dist/images/vendor/leaflet/dist/marker-icon-2x.png",
-  iconUrl:
-    "/pcd/user/themes/public-code-directory/dist/images/vendor/leaflet/dist/marker-icon.png",
-  shadowUrl:
-    "/pcd/user/themes/public-code-directory/dist/images/vendor/leaflet/dist/marker-shadow.png"
-});
+// delete Icon.Default.prototype._getIconUrl;
+// Icon.Default.mergeOptions({
+//   iconRetinaUrl:
+//     "/pcd/user/themes/public-code-directory/dist/images/vendor/leaflet/dist/marker-icon-2x.png",
+//   iconUrl:
+//     "/pcd/user/themes/public-code-directory/dist/images/vendor/leaflet/dist/marker-icon.png",
+//   shadowUrl:
+//     "/pcd/user/themes/public-code-directory/dist/images/vendor/leaflet/dist/marker-shadow.png"
+// });
 
 export default {
   name: "Worldmap",
@@ -28,7 +28,7 @@ export default {
       maxZoom: 13,
       showObjectMap: false,
       selectedMapObj: {},
-      showMore: false
+      showMore: false,
     };
   },
   computed: {
@@ -38,36 +38,36 @@ export default {
       categories: "categories",
       sectors: "sectors",
       users: "users",
-      languages: "languages"
+      languages: "languages",
     }),
 
     list() {
       return this.$store.state.filteredProducts;
-    }
+    },
   },
   components: {
     LMap,
     LTileLayer,
     LMarker,
-    LPopup
+    LPopup,
   },
   watch: {
     list(newValue, oldValue) {
       let loadingComponent = this.$buefy.loading.open({
-        container: this.$refs.mapWrapper.$el
+        container: this.$refs.mapWrapper.$el,
       });
       setTimeout(() => {
         loadingComponent.close();
         this.makeLocations();
         this.$refs.map.mapObject._onResize();
       }, 300);
-    }
+    },
   },
   methods: {
     makeLocations() {
       this.locations = [];
       for (let index = 0; index < this.list.length; index++) {
-        this.list[index].users.forEach(user => {
+        this.list[index].users.forEach((user) => {
           if (user.user_name !== "") {
             this.locations.push({
               id: index,
@@ -78,7 +78,7 @@ export default {
               url: user.user_url,
               logo: user.user_logo_url ? user.user_logo_url : "",
               name: user.user_name,
-              attribution: `<div class='is-flex is-column has-text-centered'><img src='${user.user_logo_url}' class='small-logo'/>  ${user.user_name}</div>  `
+              attribution: `<div class='is-flex is-column has-text-centered'><img src='${user.user_logo_url}' class='small-logo'/>  ${user.user_name}</div>  `,
             });
           }
         });
@@ -88,8 +88,8 @@ export default {
       this.showObjectMap = false;
       Object.assign(
         this.selectedMapObj,
-        this.list.filter(el =>
-          el.users.some(item => item.user_name === marker.name)
+        this.list.filter((el) =>
+          el.users.some((item) => item.user_name === marker.name)
         )[0]
       );
       this.showObjectMap = true;
@@ -101,12 +101,12 @@ export default {
       } else {
         return;
       }
-    }
+    },
   },
   mounted() {
     this.$nextTick(() => {
       let loadingComponent = this.$buefy.loading.open({
-        container: this.$refs.mapWrapper.$el
+        container: this.$refs.mapWrapper.$el,
       });
       setTimeout(() => {
         loadingComponent.close();
@@ -114,6 +114,6 @@ export default {
         this.$refs.map.mapObject._onResize();
       }, 500);
     });
-  }
+  },
 };
 </script>

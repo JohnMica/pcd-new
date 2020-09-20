@@ -1,69 +1,102 @@
 ---
 title: 'Create a Submission'
+in_main_menu: true
+in_footer_menu: true
+cache_enable: false
 forms:
   formbuilder:
     action: '/forms/formbuilder'
     fields:
-      name:
+      - name: sendername
         type: text
-      email:
+      - name: emailadress
         type: email
-      organisation:
+      - name: organisation
         type: text
-      project_name:
+      - name: project_name
         type: text
-      project_url:
+      - name: project_url
         type: text
-      project_logo_url:
+      - name: project_logo_url
         type: text
-      project_category:
+      - name: project_category
         type: text
-      project_sector:
+      - name: project_sector
         type: text
-      project_country:
+      - name: project_country
         type: text
-      project_languages:
+      - name: project_languages
         type: text
-      project_type:
+      - name: project_type
         type: text
-      project_licence:
+      - name: project_licence
         type: text
-      project_category:
+      - name: project_category
         type: text
-      project_sector:
+      - name: project_sector
         type: text
-      project_description:
+      - name: project_description
         type: textarea
-      project_developers_name:
-        type: text
-      project_developers_website:
-        type: text
-      project_developers_logo_url:
-        type: text
-      project_developers_categ:
-        type: text
-      project_maintainers:
-        type: text
-      project_maintainers_name:
-        type: text
-      project_maintainers_website:
-        type: text
-      project_maintainers_logo_url:
-        type: text
-      project_maintainers_categ:
-        type: text
-      project_users_name:
-        type: text
-      project_users_website:
-        type: text
-      project_users_logo_url:
-        type: text
-      project_users_category:
-        type: text
-      project_users_location_longitude:
-        type: text
-      project_users_location_latitude:
-        type: text
+      - name: project_developers_name
+        type: array
+        validate:
+          type: array
+      - name: project_developers_website
+        type: array
+        validate:
+          type: array
+      - name: project_developers_logo_url
+        type: array
+        validate:
+          type: array
+      - name: project_developers_categ
+        type: array
+        validate:
+          type: array
+      - name: project_maintainers
+        type: array
+        validate:
+          type: array
+      - name: project_maintainers_name
+        type: array
+        validate:
+          type: array
+      - name: project_maintainers_website
+        type: array
+        validate:
+          type: array
+      - name: project_maintainers_logo_url
+        type: array
+        validate:
+          type: array
+      - name: project_maintainers_categ
+        type: array
+        validate:
+          type: array
+      - name: project_users_name
+        type: array
+        validate:
+          type: array
+      - name: project_users_website
+        type: array
+        validate:
+          type: array
+      - name: project_users_logo_url
+        type: array
+        validate:
+          type: array
+      - name: project_users_category
+        type: array
+        validate:
+          type: array
+      - name: project_users_location_longitude
+        type: array
+        validate:
+          type: array
+      - name: project_users_location_latitude
+        type: array
+        validate:
+          type: array
     buttons:
       submit:
         type: submit
@@ -80,7 +113,46 @@ forms:
         bcc: '{{ form.value.email }}'
         to: '{{ config.plugins.email.to }}'
       reset: true
-in_main_menu: false
-in_footer_menu: false
-cache_enable: false
+  join-form:
+    # refresh_prevention: true
+    fields:
+      honeypot:
+        type: honeypot
+      name:
+        type: text
+        label: 'Your name'
+        validate:
+          required: true
+      email:
+        label: 'Your email'
+        type: email
+        validate:
+          required: true
+      upload_file:
+        label: 'Upload your entry.json file'
+        type: file
+        multiple: false
+        limit: 1
+        destination: 'user/data/files'
+        accept:
+          - '.json'
+    buttons:
+      submit:
+        type: submit
+        value: Submit
+    process:
+      save:
+        fileprefix: uploaded-files-
+        dateformat: Ymd-His-u
+        extension: txt
+        operation: create
+        body: "{% include 'forms/data.txt.twig' %}"
+      email:
+        body: '{% include "forms/data.html.twig" %}'
+        attachments:
+          - upload-file
+      message: 'Thank you for your email'
+      reset: true
 ---
+
+Use the appropriate method from below to create a new entry in the Database

@@ -4,18 +4,18 @@ import axios from "axios";
 const qs = require("qs");
 const transformRequest = (jsonData = {}) =>
   Object.entries(jsonData)
-    .map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
+    .map((x) => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
     .join("&");
 export default {
   name: "Progressteps",
   delimiters: ["${", "}"],
   components: {
     ValidationObserver,
-    ValidationProvider
+    ValidationProvider,
   },
   data() {
     return {
-      currentStep: 5,
+      currentStep: 1,
       submitSuccess: false,
       projectDevelopersModalActive: false,
       projectMaintainersModalActive: false,
@@ -26,7 +26,7 @@ export default {
       counterMaint: 0,
       sameAsDevs: false,
       form: {
-        name: "name",
+        sendername: "name",
         emailAddress: "email@test.com",
         organisation: "organisation",
         projectName: "project name",
@@ -45,16 +45,16 @@ export default {
             name: "dev name",
             website: "http://test.com",
             logoUrl: "http://test.com",
-            category: "dev catego"
-          }
+            category: "dev catego",
+          },
         ],
         projectMaintainers: [
           {
             name: "mant name",
             website: "http://test.com",
             logoUrl: "http://test.com",
-            category: "maint catego"
-          }
+            category: "maint catego",
+          },
         ],
         projectUsers: [
           {
@@ -64,10 +64,10 @@ export default {
             category: "categoru",
             location: {
               longitude: "54.23223",
-              latitude: "-1.23232"
-            }
-          }
-        ]
+              latitude: "-1.23232",
+            },
+          },
+        ],
       },
       tempFormData: {
         name: "name",
@@ -76,10 +76,10 @@ export default {
         category: "categoru",
         location: {
           longitude: "54.23223",
-          latitude: "-1.23232"
-        }
+          latitude: "-1.23232",
+        },
       },
-      formSubmissionResult: null
+      formSubmissionResult: null,
     };
   },
   computed: {
@@ -88,7 +88,7 @@ export default {
     },
     randomId() {
       return (Math.random() * 1e32).toString(20);
-    }
+    },
   },
   methods: {
     backToStep() {
@@ -126,7 +126,7 @@ export default {
         logoUrl: "",
         category: "",
         longitude: "",
-        latitude: ""
+        latitude: "",
       };
     },
     saveUser() {
@@ -138,7 +138,7 @@ export default {
         logoUrl: "",
         category: "",
         longitude: "",
-        latitude: ""
+        latitude: "",
       };
     },
     saveMaintainer() {
@@ -150,7 +150,7 @@ export default {
         logoUrl: "",
         category: "",
         longitude: "",
-        latitude: ""
+        latitude: "",
       };
     },
     removeDeveloper(index) {
@@ -161,7 +161,7 @@ export default {
         logoUrl: "",
         category: "",
         longitude: "",
-        latitude: ""
+        latitude: "",
       };
     },
     removeMaintainer(index) {
@@ -172,7 +172,7 @@ export default {
         logoUrl: "",
         category: "",
         longitude: "",
-        latitude: ""
+        latitude: "",
       };
     },
     removeUser(index) {
@@ -183,7 +183,7 @@ export default {
         logoUrl: "",
         category: "",
         longitude: "",
-        latitude: ""
+        latitude: "",
       };
     },
     onSubmit() {
@@ -196,10 +196,10 @@ export default {
             headers: {
               "content-type": "application/x-www-form-urlencoded",
               Accept: "application/json",
-              "X-Requested-With": "XMLHttpRequest"
-            }
+              "X-Requested-With": "XMLHttpRequest",
+            },
           })
-          .then(res => {
+          .then((res) => {
             setTimeout(() => {
               console.log("response", res);
 
@@ -212,7 +212,7 @@ export default {
               });
             }, 500);
           })
-          .catch(error => {
+          .catch((error) => {
             if (error.response) {
               // The request was made and the server responded with a status code
               // that falls out of the range of 2xx
@@ -234,8 +234,8 @@ export default {
         return;
       }
       this.currentStep++;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss">
