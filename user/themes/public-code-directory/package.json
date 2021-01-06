@@ -22,7 +22,7 @@
   "devDependencies": {
     "@mdi/js": "^5.6.55",
     "@mdi/svg": "^5.6.55",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "babel-polyfill": "latest",
     "bulma": "latest",
     "cross-env": "latest",
