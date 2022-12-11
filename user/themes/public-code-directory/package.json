@@ -29,7 +29,7 @@
     "img-loader": "^3.0.2",
     "laravel-mix": "latest",
     "node-sass": "latest",
-    "qs": "^6.9.4",
+    "qs": "^6.9.7",
     "sass": "latest",
     "sass-loader": "latest",
     "vue-template-compiler": "latest"
